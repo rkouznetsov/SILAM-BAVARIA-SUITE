@@ -1,0 +1,262 @@
+#
+#
+CONTROL_v5_3
+
+LIST = GENERAL_PARAMETERS
+  case_name = oper
+  direction_in_time = FORWARD
+  start_time = ${START_TIME}
+  computed_period = 48 hr
+  time_step = 10 min
+  computation_accuracy = 5
+  simulation_type = EULERIAN
+END_LIST = GENERAL_PARAMETERS
+
+LIST = mpi_parallel_parameters
+   x_divisions = 1
+   y_divisions = ${ny}
+   nthreads = ${OMP_NUM_THREADS}
+   use_mpiio = YES
+   use_mpiio_netcdf = YES
+##   max_wind_speed = 100 # [m/s]
+END_LIST = mpi_parallel_parameters
+
+LIST = STANDARD_SETUP
+  horizontal_advection_method_eulerian = EULERIAN_HORIZ_V4  # EULERIAN_HORIZ_V2, EULERIAN_HORIZ_V3, EULERIAN_3D_BULK
+  vertical_advection_method_eulerian = EULERIAN_VERT_V4   # EULERIAN_VERT_V3, EULERIAN_VERT_V4, EULERIAN_3D_BULK
+  kz_profile_method = SILAM_ABL_EC_FT_KZ    # SILAM_KZ_EMULATOR / SILAM_OLD_KZ / SILAM_ABL_EC_FT_KZ / EC_KZ
+
+  advection_method_lagrangian = LAGRANGIAN_WIND_ENDPOINT_3D   # LAGRANGIAN_WIND_MID(END)POINT_3D(2D)
+  random_walk_method = FULLY_MIXED    # Random-walk method [IDIOT_SIMPLE, FULLY_MIXED, BULK_GAUSSIAN]
+
+  advection_method_default = EULERIAN
+  abl_height_method = COMBINATION     # [HIRLAM_ABL, CONSTANT, COMBINATION, RICHARDSON, PARCEL, TURBULENT_ENERGY]
+  continuity_equation = anelastic_v2  # incompressible / incompressible_v2 / anelastic_v2 / nwp_omega / zero_wind / hybrid_top_down
+  horizontal_interpolation = LINEAR   # [NEAREST_POINT, SECOND_ORDER, CUBIC, LOG_LINEAR]
+  vertical_interpolation = LINEAR     # [NEAREST_POINT, SECOND_ORDER, CUBIC, LOG_LINEAR]
+  time_interpolation = LINEAR         # [NEAREST_POINT, SECOND_ORDER, CUBIC, LOG_LINEAR]
+
+  standard_setup_directory = ${scriptdir}/silam-model/ini
+  nuclide_database_fnm =  ^silam_nuclides.dat # kanika  
+  chemical_database_fnm = ^silam_chemicals_95_OC.dat
+  standard_cocktail_fnm = ^standard_chemistry_cocktails.ini
+  standard_cocktail_fnm = ^standard_SOA_cocktails.ini
+  standard_cocktail_fnm = ^standard_fires_cocktails.ini
+  standard_cocktail_fnm = ^standard_aerosols_cocktails.ini
+  grib_name_table_fnm =   ^grib_name_table.silam
+  grib_code_table_fnm =   ^grib_code_table_v5.silam
+  netcdf_name_table_fnm = ^netcdf_name_table.silam
+  land_use_data_meta_file = ^land_use_features_USGS_Eurasia.dat
+  optical_properties_meta_data_file = ^optical_properties.dat
+  timezone_list_fnm = ^tzindex.dat
+  photolysis_data_file = ^photolysis_finrose.dat
+  allow_zero_forecast_length = NO      # Whether zero-long forecasts may be used in the simulations
+                                       # Beware of zero-valued accumulated fields
+  precipitation_low_limit = 0.1 mm/hr  # Cut-off limit for precipitation rate (separate for large-sc and conv)
+q  print_debug_info = DEBUG_INFO_YES    # DEBUG_INFO_YES, DEBUG_INFO_NO
+  cloud_report_interval = 1
+  disregard_meteo_data_sources = YES
+END_LIST = STANDARD_SETUP
+
+LIST = EMISSION_PARAMETERS
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/ALD2_CAMS-REG-AP_v3_1.sa2.hdr
+# emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/CH3Cl_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/CO_CAMS-REG-AP_v3_1.sa2.hdr
+# emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/EC_COARSE_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/EC_FINE_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/ETH_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/HCHO_CAMS-REG-AP_v3_1.sa2.hdr
+# emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/MINERAL_COARSE_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/MINERAL_FINE_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/NH3_CAMS-REG-AP_v3_1.sa2.hdr
+# emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/NMVOC_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/NOX_CAMS-REG-AP_v3_1.sa2.hdr
+# emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/OC_COARSE_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/OC_FINE_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/OLE_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/PAR_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/PM2_5_10_CAMS-REG-AP_v3_1.sa2.hdr
+# emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/PM2_5_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/SO2_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/TOLUENE_CAMS-REG-AP_v3_1.sa2.hdr
+ emission_source = EULERIAN input/emis/CAMS-REG-AP_v3_1-MSK/XYLENE_CAMS-REG-AP_v3_1.sa2.hdr
+
+ emission_source = EULERIAN input/emis/sslt/src_sea_salt_global.ini
+
+# emission_source = EULERIAN /home/yury/SILAM/TNOemisM/macc3_2011_ps_CO.sa2.hdr
+# emission_source = EULERIAN /home/roux/emis/TNO_MACC3/macc3_2011_ps_NMVOC.sa2.hdr
+# emission_source = EULERIAN /home/yury/SILAM/emis/TNO_MACC3/macc3_2011_ps_NOX.sa2.hdr
+# emission_source = EULERIAN /home/yury/SILAM/TNOemisM/macc3_2011_ps_SO2.sa2.hdr
+
+#  emission_source = BIOGENIC_VOC EULERIAN /home/roux/emis/src_bio_voc.ini
+#  emission_source = EULERIAN ${versionoutputdir}/silamgfas/gfas_glob_cb4_${fcdate}-list.ini
+
+#emission_source = EULERIAN /home/yury/SILAM/testcase/Variations64/COemis2.sa
+# emission_source = EULERIAN /home/yury/SILAM/testcase/GreaterMoscow/COemisGM.sa
+#emission_source = EULERIAN /home/yury/SILAM/testcase/Variations64/NOxemis3.sa
+#emission_source = EULERIAN /home/yury/SILAM/testcase/Variations64/NOxtets3.sa
+#emission_source = EULERIAN MoscowemissionNH3new.sa
+#emission_source = EULERIAN MoscowemissionSO2newa.sa
+# emission_source = EULERIAN /home/yury/SILAM/testcase/GreaterMoscow/SO2emisGM.sa
+#emission_source = EULERIAN /home/yury/SILAM/testcase/Variations64/PM10emis.sa
+
+
+
+   cut_area_source_if_outside_meteo_grid = YES
+
+   if_technical_source_dump = NONE   # NONE / ORIGINAL_GRID / DISPERSION_GRID
+
+ # IMPORTANT #
+  cut_area_source_if_outside_meteo_grid = YES
+END_LIST = EMISSION_PARAMETERS
+
+LIST = DISPERSION_PARAMETERS
+  grid_method = OUTPUT_GRID
+  vertical_method = OUTPUT_LEVELS
+END_LIST = DISPERSION_PARAMETERS
+
+LIST = METEO_PARAMETERS
+  dynamic_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/hybridicon-eu_europe_regular-lat-lon_model-level_%ay4%am2%ad2%ah2+%f3.grib2
+  #                                              2019120200/hybridicon-eu_europe_regular-lat-lon_model-level_2019120200+025.grib2
+  dynamic_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_single-level_%ay4%am2%ad2%ah2+%f3.grib2
+  dynamic_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_soil-level_%ay4%am2%ad2%ah2+%f3.grib2
+  static_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_time-invariant_%ay4%am2%ad200.grib2
+  static_meteo_file = NETCDF:TZ_index input/tz_index_02deg.nc4
+  static_meteo_file = GRADS input/emis/sslt/salinity_map_global_1deg.fld_water_salinity.grads.super_ctl
+  meteo_time_step = 60 min
+  if_wait_for_data = NO
+  abl_parameterization_method = FULL_PARAM
+  number_of_precipitation_fields = 2
+  max_hole_in_meteo_data = 3 h
+END_LIST = METEO_PARAMETERS
+
+LIST = TRANSFORMATION_PARAMETERS
+#   transformation = PASSIVE EULERIAN
+#    transformation = PM_GENERAL EULERIAN
+   transformation = DMAT_SULPHUR EULERIAN
+   transformation = CB4_SOA EULERIAN
+#   transformation = POP_GENERAL EULERIAN
+#   transformation = ACID_BASIC    EULERIAN
+#   transformation = RADIOACTIVE EULERIAN
+   aerosol_dynamics =  SIMPLE EULERIAN
+   aerosol_dynamics =  VBS EULERIAN
+
+  dry_deposition_scheme = KS2011_TF
+  wet_deposition_scheme = NEW2011_SCAVENGING_FAKECLOUD #NEW2011_SCAVENGING #STANDARD_3D_SCAVENGING
+  if_actual_humidity_for_particle_size = YES
+  default_relative_humidity = 0.8
+  compute_thermodiffusion = NO
+  if_full_acid_chemistry = YES
+  passive_subst_ref_lifetime = 1000000 day
+  passive_subst_ref_tempr = 288
+  passive_subst_dLifeTime_dT = 0 min/K
+ 
+   oh_param_method = FROM_MASSMAP # CLIMATOLOGY
+
+   cbm_tolerance = FAST
+   biogenic_SOA_aging_rate = 1.2E-11   # cm3 molecule-1 s-1
+   anthropogenic_SOA_aging_rate = 4.0E-11   # cm3 molecule-1 s-1
+   intermediate_volatility_OC_aging_rate = 4.0E-11   # cm3 molecule-1 s-1
+   if_monoterpene_products = 1.0  # if monoterpene emission influences gas phase chemistry
+   
+   make_coarse_no3 = sslt   0.03  ! material of aerosol to make it on and stickiness coef
+   photolysis_affected_by_aod = YES
+   photolysis_AOD_wavelength = 550 nm
+   photolysis_use_fake_cloud = YES
+
+   auxiliary_cocktail = FIRE_PM_FRP_FINE_COCKTAIL
+   auxiliary_cocktail = V55_DUST_COCKTAIL
+
+END_LIST = TRANSFORMATION_PARAMETERS
+
+LIST = INITIAL_AND_BOUNDARY_CONDITIONS
+    initialize_quantity = concentration
+    initialization_file = NETCDF ${boundary_path}/BC%y4-%m2-%d2.nc
+   
+   #initialize_quantity = concentration
+   #initialize_quantity = advection_moment_x
+   #initialize_quantity = advection_moment_y
+   #initialize_quantity = advection_moment_z
+
+  initialization_file = GRADS    ${outputdir}/%ay4%am2%ad2/oper_%y4%m2%d2_%y4_%m2_%d2_00.00.0.0_dump.grads.super_ctl
+
+   boundary_type =  DIRICHLET        ! ZERO / DIRICHLET   
+   if_lateral_boundary = YES         ! YES/NO 
+   if_top_boundary =  YES             ! YES/NO 
+   if_bottom_boundary =  NO          ! YES/NO 
+   boundary_time_step =  1 hr        ! timestep unit 
+   boundary_header_filename = boundary_SILAM.ini
+#boundary_type = ZERO
+#if_lateral_boundary = YES
+#if_top_boundary = NO
+#if_bottom_boundary = NO
+#boundary_time_step = 1 hr
+END_LIST = INITIAL_AND_BOUNDARY_CONDITIONS
+
+LIST = optical_density_parameters
+  optical_coefficients_depend_on_relative_humidity = YES
+  optical_coefficients_depend_on_temperature = YES
+  if_split_aerosol_modes = YES
+  if_narrow_wave_bands = YES
+END_LIST = optical_density_parameters
+
+LIST = OUTPUT_PARAMETERS
+source_id = NO_SOURCE_SPLIT
+vertical_method = CUSTOM_LAYERS
+level_type = HEIGHT_FROM_SURFACE # kanika
+layer_thickness = 20. 50. 100. 200. 400. 500. 600. 800. 900. 1000. 2000.   
+output_time_step = 60 min
+dump_time_step = 24 hr
+output_times = REGULAR
+#output_format = GRADS_YES NETCDF4_YES
+output_format = NETCDF4
+massmap_precision_factor = 100
+time_split = DAILY_NEW_FILE
+template = ${outputdir}/${fcdate}/%case_%y4%m2%d2   
+variable_list = output_config_55.ini
+#grid_method = METEO_GRID
+
+
+ 
+
+grid_method = CUSTOM_GRID
+ grid_type = lon_lat
+grid_title = Some_within_meteo
+resol_flag = 128
+ifReduced = 0
+earth_flag = 0
+wind_component = 0
+reduced_nbr_str = 0
+nx = 100
+ny = 200
+#Moscow -- 55.75, 37.616667
+lon_start = 32.6 
+lat_start = 50.75
+
+
+dx =  0.1
+dy = 0.05
+
+lat_s_pole = -90
+lon_s_pole = 0
+
+#  iNi = 700;
+#  Nj = 620;
+#  latitudeOfFirstGridPointInDegrees = -19;
+#  longitudeOfFirstGridPointInDegrees = -19;
+#  latitudeOfLastGridPointInDegrees = 19.688;
+#  longitudeOfLastGridPointInDegrees = 24.688;
+#  jDirectionIncrementInDegrees = 0.0625008;
+#  iDirectionIncrementInDegrees = 0.0625007;
+#  latitudeOfSouthernPoleInDegrees = -35;
+#  longitudeOfSouthernPoleInDegrees = 35;
+#
+
+
+
+lat_pole_stretch = 0.
+lon_pole_stretch = 0.
+
+END_LIST = OUTPUT_PARAMETERS
+
+END_CONTROL_v5_3
