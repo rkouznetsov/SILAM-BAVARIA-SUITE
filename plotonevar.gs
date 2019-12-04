@@ -12,7 +12,18 @@ else
   if (sp = "PM10")
      var='cnc_'sp
   else
-    var='cnc_'sp'_gas'
+    if (sp= "CO")
+       clevs='set clevs .05 .1 .2 .3 .5 .7 1 1.2 1.5 2'
+       unit='mg/m3'
+       var='cnc_'sp'_gas/1000'
+    else
+      if (sp= "O3")
+         clevs='set clevs 20 40 60 80 100 120 140 160 180 200'
+         var='cnc_'sp'_gas'
+      else
+        var='cnc_'sp'_gas'
+      endif 
+    endif 
   endif
 endif
 
