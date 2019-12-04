@@ -18,6 +18,7 @@ cd $datadir
 inoutfiles=""
 for f in $datadir/oper_????????.nc4; do
 	outfile=`echo $f |sed -e s/oper_/oper_pm_/`
+	[ -f $outfile ] && continue
 	inoutfiles="$inoutfiles $f $outfile"
 done
 
@@ -79,12 +80,19 @@ scriptfile=ncalscript-$$
 
 
   echo $script |sed -e 's/;/;\n/g'> $scriptfile
-  echo -n $inoutfiles  |  xargs -n 2 -P 8 -t  ncap2 -4 -L5 -O -v -S $scriptfile
-  echo $scriptfile
+  echo -n $inoutfiles  |  xargs -n 2 -P 8 -t -r ncap2 -4 -L5 -O -v --cnk_dmn time,1 --cnk_dmn height,1 -S $scriptfile
+#  echo $scriptfile
+  rm  $scriptfile
   echo Done!
 
+  #make ctl files for PM
+for f in $datadir/oper_????????.nc4.ctl; do
+	outfile=`echo $f |sed -e s/oper_/oper_pm_/`
+  head -n 5 $f |sed -e s/oper_/oper_pm_/ > $outfile
+done
 
-#  rm  $scriptfile
+
+ 
 
 exit 0
   #
