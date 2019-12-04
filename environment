@@ -6,7 +6,8 @@ set -e
 export scriptdir=/home/yury/SILAM/Apps
 export outputdir=/home/yury/Oper_out
 
-export METEO_DIR=/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/MeteoICON/ICON-rll-meteo/scratch/ICON-rll-meteo/ICON-EU-rll/
+ICON_PATH=/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/MeteoICON
+export METEO_DIR=${ICON_PATH}
 #export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnumpi # MPI run
 export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnu    # serial run
 export boundary_path="/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/Boundary conditions, SILAM, strt01.10.19"

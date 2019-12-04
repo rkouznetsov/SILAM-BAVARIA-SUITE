@@ -116,18 +116,18 @@ LIST = DISPERSION_PARAMETERS
 END_LIST = DISPERSION_PARAMETERS
 
 LIST = METEO_PARAMETERS
-  dynamic_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/hybridicon-eu_europe_regular-lat-lon_model-level_%ay4%am2%ad2%ah2+%f3.grib2
+  dynamic_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_hybrid-level_%ay4%am2%ad2%ah2+%f3.grib2.bz2
   #                                              2019120200/hybridicon-eu_europe_regular-lat-lon_model-level_2019120200+025.grib2
-  dynamic_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_single-level_%ay4%am2%ad2%ah2+%f3.grib2
-  dynamic_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_soil-level_%ay4%am2%ad2%ah2+%f3.grib2
-  static_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_time-invariant_%ay4%am2%ad200.grib2
+  dynamic_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_single-level_%ay4%am2%ad2%ah2+%f3.grib2.bz2
+  dynamic_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_soil-level_%ay4%am2%ad2%ah2+%f3.grib2.bz2
+  static_meteo_file = GRIB  ${METEO_DIR}/%ay4%am2%ad2%ah2/icon-eu_europe_regular-lat-lon_time-invariant_%ay4%am2%ad2%ah2.grib2.bz2
   static_meteo_file = NETCDF:TZ_index input/tz_index_02deg.nc4
   static_meteo_file = GRADS input/emis/sslt/salinity_map_global_1deg.fld_water_salinity.grads.super_ctl
   meteo_time_step = 60 min
   if_wait_for_data = NO
   abl_parameterization_method = FULL_PARAM
   number_of_precipitation_fields = 2
-  max_hole_in_meteo_data = 3 h
+  max_hole_in_meteo_data = 3 hr
 END_LIST = METEO_PARAMETERS
 
 LIST = TRANSFORMATION_PARAMETERS
@@ -170,14 +170,13 @@ LIST = TRANSFORMATION_PARAMETERS
 END_LIST = TRANSFORMATION_PARAMETERS
 
 LIST = INITIAL_AND_BOUNDARY_CONDITIONS
-    initialize_quantity = concentration
-    initialization_file = NETCDF ${boundary_path}/BC%y4-%m2-%d2.nc
+   # initialize_quantity = concentration
+   # initialization_file = NETCDF ${boundary_path}/BC%y4-%m2-%d2.nc
    
-   #initialize_quantity = concentration
-   #initialize_quantity = advection_moment_x
-   #initialize_quantity = advection_moment_y
-   #initialize_quantity = advection_moment_z
-
+   initialize_quantity = concentration
+   initialize_quantity = advection_moment_x
+   initialize_quantity = advection_moment_y
+   initialize_quantity = advection_moment_z
   initialization_file = GRADS    ${outputdir}/%ay4%am2%ad2/oper_%y4%m2%d2_%y4_%m2_%d2_00.00.0.0_dump.grads.super_ctl
 
    boundary_type =  DIRICHLET        ! ZERO / DIRICHLET   
