@@ -21,7 +21,12 @@ else
          clevs='set clevs 20 40 60 80 100 120 140 160 180 200'
          var='cnc_'sp'_gas'
       else
-        var='cnc_'sp'_gas'
+        if (sp= "SO2")
+           clevs='set clevs .1 .2 .5 1 2 5 10 20 50 100'
+           var='cnc_'sp'_gas'
+        else
+          var='cnc_'sp'_gas'
+        endif 
       endif 
     endif 
   endif
