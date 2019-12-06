@@ -1,0 +1,6 @@
+# 
+# m h  dom mon dow   command
+12 13 * * * /home/yury/SILAM/boundary/download4.sh >/dev/null 2>&1
+16 9,21 * * * /home/yury/SILAM/Apps/run_all.sh
+
+# 2>&1 >/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/MeteoICON/1.log
