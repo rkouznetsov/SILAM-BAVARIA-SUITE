@@ -13,7 +13,7 @@ export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnu    # serial run
 export boundary_path="/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/Boundary conditions, SILAM, strt01.10.19"
 export OMP_NUM_THREADS=8
 export ny=1 ## Number of MPI tasks
-export fcdate=`date -u -d "-3 hours" +%Y%m%d`
+export fcdate=`date -u -d "3 hours" +%Y%m%d`
 #export fcdate=`date -u -d "-2 days" +%Y%m%d`
 
 set +u

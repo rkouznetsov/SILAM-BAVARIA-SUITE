@@ -21,7 +21,6 @@ else
   bash ./getcams3.sh
   echo Meteo complete at `date`
 fi
-exit 1
 
 
 ./run_model.sh
