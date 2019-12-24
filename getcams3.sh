@@ -1,13 +1,13 @@
 #/bin/sh
 
-. environment
-exec 5> debug_output.txt
-BASH_XTRACEFD="5"
+#. environment
+#exec 5> debug_output.txt
+#BASH_XTRACEFD="5"
 set -u
-#set -e
-set -x 
+set -e
+#set -x 
 
-fcdate=`date -u -d "4 hours ago" +%Y%m%d%H`
+fcdate=`date -u -d "10 hours ago" +%Y%m%d%H`
 #fcdate=2019120512
 
 #adjust it to  00Z or 12Z fcst
@@ -125,7 +125,7 @@ for step in $steplist; do
           [ -s $destfile  ] && continue
           echo "curl -s --max-time 15 -f $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile}"
         done
-      done | xargs -P $ncurls -t -I XXX sh -c "XXX"
+      done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $file3dh failed
       
       file3d=${pref_3d}${fcdate}+${step}.grib2
       base=`basename $file3dh .bz2`
@@ -157,7 +157,7 @@ for step in $steplist; do
       V=`echo $v | tr  '[:lower:]' '[:upper:]'`
         destfile=${filepref}${fcdate}_${step}_${V}.grib2.bz2
         [ -f $destfile ] || echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$v/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
-    done | xargs -P $ncurls -t -I XXX sh -c "XXX"
+    done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesfc failed
     base=`basename $filesfc .bz2`
     lbzip2 -dvc ${filepref}${fcdate}_*.grib2.bz2 > $base.tmp &&  rm ${filepref}${fcdate}_*.grib2.bz2
     $cutgrib $base.tmp $base
@@ -175,7 +175,7 @@ for step in $steplist; do
         destfile=${filepref}${fcdate}_${step}_${V}.grib2.bz2
         vtmp=`echo $v| sed -e 's/.*_w_so/w_so/' -e 's/.*_t_so/t_so/'`  ##Cut soil level from varname
         [ -f $destfile ] || echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$vtmp/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
-    done | xargs -P $ncurls -t -I XXX sh -c "XXX"
+    done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesoil failed
 
     base=`basename $filesoil .bz2`
    
