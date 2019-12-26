@@ -7,7 +7,7 @@ set -u
 set -e
 #set -x 
 
-fcdate=`date -u -d "10 hours ago" +%Y%m%d%H`
+fcdate=`date -u -d "4 hours ago" +%Y%m%d%H`
 #fcdate=2019120512
 
 #adjust it to  00Z or 12Z fcst
@@ -33,7 +33,7 @@ cd $scratchdir
 
 
 
-ncurls=120
+ncurls=60
 
 var3d="p qv t tke u v w"
 #clc onlu at pressure levels!
@@ -83,9 +83,9 @@ if [ ! -f $staticfile ]; then
       V=`echo $v | tr  '[:lower:]' '[:upper:]'`
       destfile=${filepref}${fcdate}_${V}.grib2.bz2
       [ -s $destfile  ] && continue
-      echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile}"
+      echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile} && echo ${destfile} Done, try $itry || echo ${destfile} Failed, try $itry.."
       #curl --verbose   -f $urlpref/$v/$destfile -o $destfile
-    done |xargs -P $ncurls -t -I XXX sh -c "XXX"
+    done |xargs -P $ncurls  -I XXX sh -c "XXX"
     base=`basename $staticfile .bz2`
     nmsg=`ls ${filepref}${fcdate}_*.grib2.bz2| wc -w` 
     if [ $nmsg ==  5 ]; then
@@ -123,9 +123,9 @@ for step in $steplist; do
         for lev in `seq 1 60`; do
           destfile=${pref_3d}${fcdate}_${step}_${lev}_${V}.grib2.bz2
           [ -s $destfile  ] && continue
-          echo "curl -s --max-time 15 -f $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile}"
+          echo "curl -s --max-time 40 -f $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile} && echo ${destfile} Done, try $itry || echo ${destfile} Failed, try $itry.."
         done
-      done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $file3dh failed
+      done | xargs -P $ncurls  -I XXX sh -c "XXX" || echo Some curls for $file3dh failed
       
       file3d=${pref_3d}${fcdate}+${step}.grib2
       base=`basename $file3dh .bz2`
@@ -153,13 +153,26 @@ for step in $steplist; do
   filepref=$pref_sfc
   filesfc=$outdir/${filepref}${fcdate}+${step}.grib2.bz2
   if [ ! -f $filesfc ]; then
-    for v in $varsfc; do
-      V=`echo $v | tr  '[:lower:]' '[:upper:]'`
-        destfile=${filepref}${fcdate}_${step}_${V}.grib2.bz2
-        [ -f $destfile ] || echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$v/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
-    done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesfc failed
-    base=`basename $filesfc .bz2`
-    lbzip2 -dvc ${filepref}${fcdate}_*.grib2.bz2 > $base.tmp &&  rm ${filepref}${fcdate}_*.grib2.bz2
+    for itry in `seq 1 10`; do
+      for v in $varsfc; do
+        V=`echo $v | tr  '[:lower:]' '[:upper:]'`
+          destfile=${filepref}${fcdate}_${step}_${V}.grib2.bz2
+          [ -f $destfile ] || echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$v/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
+      done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesfc failed
+      base=`basename $filesfc .bz2`
+      nmsg=`ls ${filepref}${fcdate}_${step}_*.grib2.bz2|wc -w`
+      if [ $nmsg ==  42 ]; then
+        break
+      else
+        echo  "nmsg_sfc =  $nmsg Retry $itry"
+      fi
+      # nmsg=`grib_ls $file3d.tmp |grep "total messages" |awk '{print $1;}'`
+    done
+    if [ $itry -ge 9 ]; then
+      echo "Failed after 9 tries"
+      exit 255
+    fi
+    cat  ${filepref}${fcdate}_*.grib2.bz2 | lbzip2 -dc > $base.tmp &&  rm ${filepref}${fcdate}_*.grib2.bz2
     $cutgrib $base.tmp $base
     lbzip2 $base
     rm $base.tmp
@@ -170,16 +183,29 @@ for step in $steplist; do
   filepref=$pref_soil
   filesoil=$outdir/${filepref}${fcdate}+${step}.grib2.bz2
   if [ ! -f $filesoil ]; then
-    for v in $varsoil; do
-      V=`echo $v | tr  '[:lower:]' '[:upper:]'`
-        destfile=${filepref}${fcdate}_${step}_${V}.grib2.bz2
-        vtmp=`echo $v| sed -e 's/.*_w_so/w_so/' -e 's/.*_t_so/t_so/'`  ##Cut soil level from varname
-        [ -f $destfile ] || echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$vtmp/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
-    done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesoil failed
+    for itry in `seq 1 10`; do
+      for v in $varsoil; do
+        V=`echo $v | tr  '[:lower:]' '[:upper:]'`
+          destfile=${filepref}${fcdate}_${step}_${V}.grib2.bz2
+          vtmp=`echo $v| sed -e 's/.*_w_so/w_so/' -e 's/.*_t_so/t_so/'`  ##Cut soil level from varname
+          [ -f $destfile ] || echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$vtmp/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
+      done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesoil failed
 
-    base=`basename $filesoil .bz2`
+      base=`basename $filesoil .bz2`
+      nmsg=`ls ${filepref}${fcdate}_${step}_*.grib2.bz2|wc -w`
+      if [ $nmsg ==  15 ]; then
+        break
+      else
+        echo  "nmsg_soil =  $nmsg Retry $itry"
+      fi
+      # nmsg=`grib_ls $file3d.tmp |grep "total messages" |awk '{print $1;}'`
+    done
+    if [ $itry -ge 9 ]; then
+      echo "Failed after 9 tries"
+      exit 255
+    fi
    
-    lbzip2 -dvc ${filepref}${fcdate}_*.grib2.bz2 > $base.tmp &&  rm ${filepref}${fcdate}_*.grib2.bz2
+    cat ${filepref}${fcdate}_*.grib2.bz2 | lbzip2 -dc> $base.tmp &&  rm ${filepref}${fcdate}_*.grib2.bz2
     $cutgrib $base.tmp $base
     lbzip2 $base
     rm $base.tmp

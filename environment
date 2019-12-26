@@ -6,7 +6,7 @@ set -e
 export scriptdir=/home/yury/SILAM/Apps
 export outputdir=/home/yury/Oper_out
 
-ICON_PATH=/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/MeteoICON
+export ICON_PATH=/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/MeteoICON
 export METEO_DIR=${ICON_PATH}
 #export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnumpi # MPI run
 export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnu    # serial run
