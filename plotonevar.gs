@@ -13,9 +13,9 @@ else
      var='cnc_'sp
   else
     if (sp= "CO")
-       clevs='set clevs .05 .1 .2 .3 .5 .7 1 1.2 1.5 2'
-       unit='mg/m3'
-       var='cnc_'sp'_gas/1000'
+       clevs='set clevs 15 25 40 70 150 250 400 700 1500 2500'
+       unit='ug/m3'
+       var='cnc_'sp'_gas'
     else
       if (sp= "O3")
          clevs='set clevs 20 40 60 80 100 120 140 160 180 200'
@@ -38,7 +38,11 @@ endif
 'xdfopen 'infile
 
 'set gxout grfill'
-'set mpdset hires'
+*'set mpdset hires'
+'set mpdset moscow-mpd'
+'set mpt * off'
+'set mpt 5 1'
+
 'colors def_lowwhite'
 '!mkdir -p 'outDir
 
@@ -64,7 +68,7 @@ while (t<=nT)
   'draw title 'sp' 'unit' 'time':00, 'date
   
    pic=outDir'/'sp'_'math_format("%03g",t)'.png'
-  'printim 'pic' white x600 y800'
+  'printim 'pic' white x800 y600'
    say pic
   'c'
   t = t + 1

@@ -227,10 +227,10 @@ earth_flag = 0
 wind_component = 0
 reduced_nbr_str = 0
 nx = 100
-ny = 200
+ny = 120
 #Moscow -- 55.75, 37.616667
 lon_start = 32.6 
-lat_start = 50.75
+lat_start = 53.025
 
 
 dx =  0.1

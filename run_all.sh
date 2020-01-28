@@ -32,3 +32,5 @@ echo PM done at `date`
 
 ./make_pictures.sh
 echo Pictures done at `date`
+./movetohtml.sh
+`
