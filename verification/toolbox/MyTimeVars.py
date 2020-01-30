@@ -614,10 +614,10 @@ class TsMatrix:
 
                 t = outf.createVariable("time","i4",("time",))
                 t.standard_name="time"
-                t.long_name="end of averaging hour"
+                t.long_name="end of averaging interval"
                 t.calendar="standard"
-                t.units = reftime.strftime("hours since %Y-%m-%d %H:%M:%S UTC")
-                t[:] = [ (h - reftime).total_seconds()/3600 for h in self.times ]
+                t.units = reftime.strftime("minutes since %Y-%m-%d %H:%M:%S")
+                t[:] = [ (h - reftime).total_seconds()/60 for h in self.times ]
 
                 lon = outf.createVariable("lon","f4",("station",))
                 lon.standard_name = "longitude"
@@ -653,8 +653,10 @@ class TsMatrix:
                 val.coordinates = "lat lon alt station_code"
                 val.units = self.units
 
-                ## .01 absolute precision
-                outdat = np.around(self.vals,  decimals=2)
+                ## .01 absolute precision decimals=2
+               # if not (decimals is None):
+               #     outdat = np.around(self.vals,  decimals=decimals)
+                outdat = self.vals
                 
                 #Output sorted stations
                 for ist,st in enumerate(self.stations):

@@ -1,8 +1,6 @@
 #!/bin/bash
 
 
-set -e
-set -u 
 
 
 cd /home/yury/SILAM/Apps
@@ -10,6 +8,8 @@ echo Starting run_all `date`
 
 . ./environment
 
+set -e
+set -u 
 
 d=`date -u +%H`
 if [ $d -lt 12 ]; then
@@ -32,5 +32,8 @@ echo PM done at `date`
 
 ./make_pictures.sh
 echo Pictures done at `date`
+
 ./movetohtml.sh
-`
+
+./extract_timeseries.sh
+

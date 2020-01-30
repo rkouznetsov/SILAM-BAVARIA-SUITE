@@ -10,6 +10,8 @@ import datetime as dt
 import numpy as np
 from toolbox import MyTimeVars
 
+import memstations
+
 os.umask(0002)
 
 
@@ -25,20 +27,8 @@ args  = parser.parse_args()
 #obsfile='../TimeVars/obs/obs_CO.nc'
 
 tsfile = "MEMcoordinates.txt"
-print "Getting stations", tsfile
-#tv = MyTimeVars.TsMatrix.fromNC(obsfile)
-#stationdic={}
-stations=[]
-with open(tsfile) as inf:
-    for l in inf:
-        a=l.split()
-#        Balchug 55.7453 37.627975 127  Roadside
-        
-        stations.append(timeseries.Station(a[0], a[0], a[2], a[1], a[3], a[4]))
-#        code, name, x, y, height=0.0, area_type='', dominant_source='')
-stationdic={}
-for st in stations:
-    stationdic[st.code] = st
+
+stationdic = memstations.getStations(tsfile)
 
 stlist = sorted(stationdic.keys())
 
@@ -58,7 +48,7 @@ except ValueError: ##raised on files with vertical
                 remove_if_outside=True, verbose=True)
 
 hrlist = serlist[0].times()
-
+print hrlist
 ntimes = len(hrlist)
 nst =  len(stlist)
 
