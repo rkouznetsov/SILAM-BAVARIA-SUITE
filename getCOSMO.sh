@@ -7,7 +7,16 @@ set -u
 set -e
 #set -x 
 
-fcdate=`date -u -d "4 hours ago" +%Y%m%d%H`
+fcdate=`date -u -d "5 hours ago" +%Y%m%d%H`
+
+fch=`echo $fcdate |cut -b 9-10`
+if [ $fch -gt 2  -a  $fch -lt 5 ]; then
+  echo "The DWD directory might be updating now. Please try latar."
+  exit -1
+fi
+
+
+
 #fcdate=2019120512
 
 #03 H is the longest forecast
