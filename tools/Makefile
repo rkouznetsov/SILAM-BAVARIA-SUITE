@@ -1,5 +1,5 @@
 
-PROG=ICONEU2hybrid
+PROG=COSMO-d2-2hybrid
 
 all: $(PROG)
 
