@@ -7,10 +7,11 @@ set -u
 set -e
 #set -x 
 
-fcdate=`date -u -d "5 hours ago" +%Y%m%d%H`
+fcdate=`date -u -d "3 hours ago" +%Y%m%d%H`
 
 fch=`echo $fcdate |cut -b 9-10`
-if [ $fch -gt 2  -a  $fch -lt 5 ]; then
+if [ $fch -lt 3 ]; then
+  echo $fch
   echo "The DWD directory might be updating now. Please try latar."
   exit -1
 fi
@@ -181,7 +182,8 @@ for step in $steplist; do
     fi
     cat  ${filepref}${fcdate}_*.grib2.bz2 | lbzip2 -dc > $base.tmp 
     rm ${filepref}${fcdate}_*.grib2.bz2
-    grib_set -s packingType=grid_ccsds $base.tmp $base
+    # get rid of 15-min steps
+    grib_set -w stepRange=${step} -S -s packingType=grid_ccsds $base.tmp $base
     rm $base.tmp
     mv $base $filesfc
 
