@@ -17,6 +17,8 @@ if [ -z "$1" ]; then # get the argument (does not make much sense since only yes
 else 
      basedate=$1
 fi
+basedate=`date -u -d "$basedate" +%Y%m%d`
+
 set -u 
 ncks=ncks
 
@@ -57,7 +59,7 @@ bbox="spatial=bb&north=56&west=4&east=16&south=46"
 
 
 
-maxjobs=2
+maxjobs=4
 
 # make dates
 run=`date -u -d $basedate +"%FT00:00:00Z"`
@@ -66,8 +68,7 @@ run=`date -u -d $basedate +"%FT00:00:00Z"`
 
 for try  in `seq 0 10`; do
    missfiles=""
-   #for hr in `seq 24 72` ; do
-   for hr in `seq 24` ; do
+   for hr in `seq 24 96` ; do
         time=`date -u -d"$basedate + $hr hours" +"%FT%H:00:00Z"`
         outf=`date -u -d"$basedate + $hr hours" +"SILAM4DE${run}_%Y%m%d%H.nc"`
         [ -f $outf ] && continue
@@ -75,7 +76,12 @@ for try  in `seq 0 10`; do
 
 
         URL="$urlbase$run?var=$varlist&$bbox&temporal=range&time_start=$time&time_end=$time&accept=netcdf&email=$email"
-        (wget --progress=dot:giga $URL -O ${outf}.tmp && $ncks --mk_rec_dmn time ${outf}.tmp $outf && rm ${outf}.tmp ) &
+#        echo wget \"$URL\"
+#        exit
+        #
+        # For some reason thredds does not supply _CoordinateModelRunDate anymore
+        attcmd="-a _CoordinateModelRunDate,global,c,c,$run ${outf}.tmp -a history,global,d,,, -a history_of_appended_files,global,d,,,"
+        (wget -q $URL -O ${outf}.tmp && ncatted -h $attcmd && $ncks -h --mk_rec_dmn time ${outf}.tmp $outf && rm ${outf}.tmp && echo  $outf done!) &
         while [ `jobs | wc -l` -ge $maxjobs ]; do sleep 1; done
 
    done
