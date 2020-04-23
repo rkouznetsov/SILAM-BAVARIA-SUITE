@@ -11,6 +11,8 @@ mypath=`realpath $0`
 export scriptdir=`dirname $mypath` 
 #export outputdir=/home/yury/Oper_out
 
+export fctype=pollen
+
 export COSMO_PATH=${scriptdir}/COSMO-meteo
 export METEO_DIR=${COSMO_PATH}
 #export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnumpi # MPI run
@@ -22,12 +24,23 @@ export silam_binary=/home/kouzne/SILAM/silamgit/bin/silam_v5_7.gnu
 export OMP_NUM_THREADS=8
 
 #export ny=1 ## Number of MPI tasks
-export OUTPUTDIR=output
+export OUTPUTDIR=${scriptdir}/output
 
 export outsuff="" ## Can be set non-empty to alter the  output directory
 
 export fcdate=`date -u -d "3 hours" +%Y%m%d`
+
+export fchour=00
+export maxhours=48
 #export fcdate=`date -u -d "-2 days" +%Y%m%d`
+
+
+export PUTLOGOCMDPOLLEN="composite  -geometry  +70+515  $scriptdir/grads/fmi-logo-60x30a.png"
+##export PUTLOGOCMDPOLLEN="composite  -geometry  +70+360  $scriptdir/../common/fmi-logo-60x30a.png"
+#export PUTLOGOCMDPOLLEN="composite  -geometry  +40+460  $scriptdir/../common/FMI_EAN_logo_vert.png"
+# Special logo for aqi and pollen index pictures
+#export PUTLOGOCMDINDEX="composite  -geometry  +40+460  $scriptdir/grads/FMI-Health2.png"
+
 
 set +u
 set +e

@@ -6,9 +6,9 @@ LIST = GENERAL_PARAMETERS
   case_name = oper
   direction_in_time = FORWARD
   start_time = ${START_TIME}
-  computed_period = ${maxhours} hr
+  computed_period = 48 hr
   time_step = 6 min
-  computation_accuracy = 5
+  computation_accuracy = 1
   simulation_type = EULERIAN
 END_LIST = GENERAL_PARAMETERS
 
@@ -50,11 +50,11 @@ END_LIST = mpi_parallel_parameters
 LIST = emission_parameters
 
    emission_source = EULERIAN emis/pollen/src_pollen_birch.ini
-   emission_source = EULERIAN emis/pollen/src_pollen_grass.ini
-   emission_source = EULERIAN emis/pollen/src_pollen_olive.ini
-   emission_source = EULERIAN emis/pollen/src_pollen_ragweed.ini
-   emission_source = EULERIAN emis/pollen/src_pollen_alder.ini
-   emission_source = EULERIAN emis/pollen/src_pollen_mugwort.ini
+#   emission_source = EULERIAN emis/pollen/src_pollen_grass.ini
+#   emission_source = EULERIAN emis/pollen/src_pollen_olive.ini
+#   emission_source = EULERIAN emis/pollen/src_pollen_ragweed.ini
+#   emission_source = EULERIAN emis/pollen/src_pollen_alder.ini
+#   emission_source = EULERIAN emis/pollen/src_pollen_mugwort.ini
    
 #   source_dump_time_step = 1 hr
 #   #source_dump_start_time
@@ -146,7 +146,7 @@ LIST = emission_parameters
    layer_thickness = 25. 50. 100. 200. 400. 750. 1200. 2000. 2000. 2000.   # output levels [m]/[pa]/[hybrid_nbr], reals
    output_time_step = 1 hr
    output_times = REGULAR 
-   output_format = NETCDF4
+   output_format = NETCDF3
   #output_format = grads
    time_split = HOURLY_NEW_FILE 
    template =  ${OUTPUTDIR}/${fcdate}${outsuff}/%source_pollen_%y4%m2%d2%h2
@@ -156,22 +156,26 @@ LIST = emission_parameters
 
    grid_method = CUSTOM_GRID     # METEO_GRID / EMISSION_GRID / OUTPUT_GRID / CUSTOM_GRID
  grid_type = lon_lat
-   grid_title = COSMOrll grid
+   grid_title = MEPS2020rll grid
    resol_flag = 128
    ifReduced = 0 
    earth_flag = 0
    wind_component = 0 
    reduced_nbr_str = 0 
-  # COSMO domain with some cut out
+  # Meps domain with sea and south cut out
   lat_start = -4 
    lon_start = -4
-   dx = 0.02
-   dy = 0.02
-   nx = 401   # 
-   ny = 501 
+   dx = 0.04
+   dy = 0.04
+   nx = 201   # 
+   ny = 251 
 
+    #lon0 to 0th meridian
+    #lat0 to equator
    lat_s_pole = -40
    lon_s_pole = 10.
+#   lat_s_pole = -30.
+#   lon_s_pole = 20.
    lat_pole_stretch = 0.
    lon_pole_stretch = 0.
  END_LIST = output_parameters
