@@ -10,8 +10,8 @@ set -e
 fcdate=`date -u -d "3 hours ago" +%Y%m%d%H`
 
 fch=`echo $fcdate |cut -b 9-10`
-if [ $fch -lt 3 ]; then
-  echo $fch
+if [ $fch -lt 2 ]; then
+  echo $fch is less than 2 hours sonce the forecast lead time.
   echo "The DWD directory might be updating now. Please try latar."
   exit -1
 fi
