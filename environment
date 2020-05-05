@@ -1,15 +1,9 @@
 #!/bin/sh
-set -x
-set -u
-set -e
 
 
 
-
-mypath=`realpath $0`
-
-export scriptdir=`dirname $mypath` 
-#export outputdir=/home/yury/Oper_out
+scriptdir=`pwd`
+export scriptdir
 
 export fctype=pollen
 
@@ -17,7 +11,7 @@ export COSMO_PATH=${scriptdir}/COSMO-meteo
 export METEO_DIR=${COSMO_PATH}
 #export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnumpi # MPI run
 export silam_binary=${scriptdir}/../silam-model/bin/silam_v5_7.gnu    # serial run
-export silam_binary=/home/kouzne/SILAM/silamgit/bin/silam_v5_7.gnu
+#export silam_binary=/home/kouzne/SILAM/silamgit/bin/silam_v5_7.gnu
 
 #export boundary_path="/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/Boundary conditions, SILAM, strt01.10.19"
 #export boundary_path="/media/disk-6T/BoundariesFMI"
@@ -41,7 +35,7 @@ export PUTLOGOCMDPOLLEN="composite  -geometry  +70+515  $scriptdir/grads/fmi-log
 # Special logo for aqi and pollen index pictures
 #export PUTLOGOCMDINDEX="composite  -geometry  +40+460  $scriptdir/grads/FMI-Health2.png"
 
-
-set +u
-set +e
-set +x
+# These guys prevent ecflow from trapping errors!
+#set +u
+#set +e
+#set +x

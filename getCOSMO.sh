@@ -37,7 +37,7 @@ mkdir -p $outdir
 
 
 ##working directory for temporary files
-scratchdir=/tmp/getCOSMO${fcdate}
+scratchdir=/dev/shm/getCOSMO${fcdate}
 rm -rf $scratchdir
 mkdir -p $scratchdir
 cd $scratchdir
@@ -225,6 +225,10 @@ for step in $steplist; do
     mv $base $filesoil
   fi
 done
+echo Cleanup..
+cd $scriptdir
+rm -rvf $scratchdir
+echo Done! 
 
 
 exit 0

@@ -5,5 +5,5 @@ all: $(PROG)
 
 
 $(PROG): $(PROG).f90
-	gfortran $(PROG).f90 -I /usr/include -o $(PROG) -leccodes  -leccodes_f90 #&& ./$(PROG)
+	gfortran $(PROG).f90  -o $(PROG) -I$(HOME)/.local/include  -L$(HOME)/.local/lib -leccodes  -leccodes_f90 #&& ./$(PROG)
 
