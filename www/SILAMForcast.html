@@ -1,0 +1,224 @@
+
+<HTML>
+<META HTTP-EQUIV="Refresh" CONTENT=3600 charset="UTF-8"> 
+<HEAD><TITLE>SILAM 00Z O3</TITLE></HEAD>
+
+
+
+<SCRIPT LANGUAGE="JavaScript">
+
+// Animator internal variables
+
+var oldidx = -1;
+var isanim = false;   // Is animation on
+var timerID = null;
+
+// Data size
+
+var n;
+
+// Preload all images for increased interactive speed
+
+pretimesoff = new Array();
+pretimeson = new Array();
+preimages = new Array();
+preplay = new Array();
+var argument = location.search.split('param=')[1]
+if (argument==""){
+  argument = "CO_gas_srf"
+}
+function preload()
+{
+  n = files.length;  // Initialize variable here
+
+  for(var i=0 ; i<n ; i++)
+  {
+    var tmp = times[i];
+    pretimesoff[i] = new Image();
+    pretimesoff[i].src = tbase+offcolor+tmp;
+    pretimeson[i] = new Image();
+    pretimeson[i].src = tbase+oncolor+tmp;
+    preimages[i] = new Image();
+    preimages[i].src = files[i];
+  }
+  preplay[0] = new Image();
+  preplay[0].src = tbase+offcolor+"PLAY.png";
+  preplay[1] = new Image();
+  preplay[1].src = tbase+oncolor+"PLAY.png";
+}
+
+// Function to change to a new time and picture
+
+function showgif(idx,over) {
+
+  if(idx==oldidx) return;
+
+  if(idx == n)
+  {
+     if(!isanim)
+     {
+       isanim = true;
+       timerID = setTimeout("doanim()",delay);
+     }
+     document.images["img"+n].src = preplay[1].src;
+  }
+  else
+  {
+    if(over)
+    {
+      document.images["img"+n].src = preplay[0].src;
+      if(timerID) clearTimeout(timerID);
+      isanim = false;
+    }
+    if(oldidx >= 0)
+       document.images["img"+oldidx].src = pretimesoff[oldidx].src;
+
+    document.images["img"+idx].src = pretimeson[idx].src;
+    document.images["ennuste"].src = preimages[idx].src;
+    oldidx = idx;
+  }
+}
+
+function doanim() {
+  if(!isanim) return;
+
+  showgif( (oldidx+1) % n , 0 );
+  if(oldidx+1==n)
+     timerID = setTimeout("doanim()",wrapdelay);
+  else
+     timerID = setTimeout("doanim()",delay);
+}
+
+// Function called to setup the animation
+
+function restart() {
+  if(timerID) clearTimeout(timerID);
+  isanim = false;
+  showgif(n-1,1);
+// showgif(0,1);  // 0th = 1st gif
+// showgif(n,1);  // nth = PLAY
+}
+
+// Function to produce standard HTML body
+
+function mkanimbody()
+{
+  document.writeln('<TABLE BORDER=0 VALIGN="TOP">');
+  document.writeln('<TR><TD>');
+
+
+  document.writeln('<TABLE BORDER=0 ALIGN="CENTER" CELLPADDING="0" CELLSPACING="0">');
+  document.writeln('<TR><TD>');
+  for(i=0 ; i<n ; i++) {
+    var tmp = times[i];
+    document.writeln('<A HREF="javascript:void(0)" onMouseOver="showgif('+i+',1)">');
+    document.writeln('<IMG ALIGN=MIDDLE HSPACE="0" VSPACE="0" NAME="img'+i+'" SRC="'+pretimesoff[i].src+'"></A><BR>');
+  }
+  document.writeln('<A HREF="javascript:void(0)" onMouseOver="javascript:showgif('+n+',1)">');
+  document.writeln('<BR><IMG ALIGN="MIDDLE" HSPACE="0" VSPACE="0" NAME="img'+n+'" SRC="'+preplay[0].src+'"></A><BR>')
+ 
+  document.writeln('<BR><BR><BR><BR><BR><BR><BR><BR><BR>');
+ 
+  document.writeln('</TD></TR>');
+
+  document.writeln('</TABLE>');
+
+
+
+  document.writeln('</TD><TD>');
+
+
+
+  document.writeln('<TABLE BORDER=0 ALIGN="CENTER">');
+  document.writeln('<TR ALIGN="CENTER" VALIGN="TOP">');
+  document.writeln('<TD><IMG BORDER=1 NAME="ennuste" SRC="'+preimages[0].src+'"></TD>');
+  document.writeln('</TR>');
+  document.writeln('</TABLE>');
+
+
+
+
+  document.writeln('</TD></TR>');
+  document.writeln('</TABLE>');
+
+
+}
+
+// Animation settings
+
+var delay     = 100;  // Animation speed
+var wrapdelay = 2000; // Wrap-around delay
+var numdays = 4;
+var tbase = "./Napit/";      // Base name for clock
+
+var oncolor = "red";
+var offcolor = "blue";
+var files = new Array ();
+var times = new Array ();
+
+var ddd;
+var fff;
+                                                     
+   for (i=-48; i<=48; i++) {
+       if (i>0) {
+        ddd = "000";
+        fff = i; 
+       } else {
+        ddd = "00" + (~~((-i)/24)+1);
+        fff = ((i+480 - 1)%24) + 1;
+       }
+       if (fff<10) {fff = '00'+fff} else if (fff<100) {fff = '0'+fff} else {fff = ''+fff};
+       files.push(ddd+"/"+argument+"_"+fff+".png");
+       if (i % 6 == 0) {
+          if (i>=0) {
+            times.push("+"+(i) + "h.png");
+          } else{
+            times.push((i) + "h.png");
+          }
+       }else {
+           times.push("dummyt.png");
+       }
+  }
+
+
+//console.table(fbase)
+
+//console.table(nf)
+preload();      // Must be after the SSI
+</SCRIPT>
+
+</HEAD>
+
+<!--<BODY BGCOLOR=white onLoad="restart()">
+<CENTER>
+<P><FONT COLOR=blue>Parameter:   <P id="a"> </P> 
+<script language="javascript">
+    var a = argument;
+    document.getElementById("a").innerHTML=a; 
+</script>
+</FONT> 
+</P>
+<!-- by MK 9/2004
+<A HREF="00_O3.html"><FONT COLOR="blue">Printable page 00Z O3</FONT></A>
+</CENTER>
+-->
+<BODY BGCOLOR=white onLoad="restart()">
+<CENTER>
+<BODY LINK=white VLINK=white ALINK=white>
+
+<SCRIPT LANGUAGE="JavaScript"><!--
+mkanimbody();
+// -->
+</SCRIPT>
+
+
+
+<NOSCRIPT>
+Page needs Netscape 4.0 or Internet Explorer 4.0 browser or newer - and: 
+ JavaScript turned on.
+</NOSCRIPT>
+
+</BODY>
+
+</HTML>
+

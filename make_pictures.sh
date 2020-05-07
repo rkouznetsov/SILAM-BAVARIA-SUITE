@@ -1,14 +1,12 @@
 #!/bin/bash
-
-source ./environment
-
-set -u
-set -e
+set -u -e
 
 set -o pipefail
 
 umask 0002
 
+nproc=`nproc`
+#nproc="1 echo"  # this disables all xargs calls
 
 # environment: version, family, publish
 
@@ -17,13 +15,10 @@ gradsscriptdir=$scriptdir/grads
 
 
 rsync="/usr/bin/rsync -v"
-rotate_dates=$scriptdir/rotate_dates.sh
-
 
 outputdir=${OUTPUTDIR}
 
-# The new transfers through shared drive:
-#fmi_data_path=/fmi/data/silam.fmi.fi/AQ/$suite/$family/
+#outputdir=${OUTPUT_DIR}
 
 picture_dir=$outputdir/webloads/$fctype/$fcdate${outsuff}
 
@@ -61,7 +56,6 @@ pwd
 
    done | time xargs -t -l -P 6 grads -bpc
 
-exit 0
 
 # put logo if corresponding command is provided
 #cd $scriptdir/delme || exit 234
@@ -69,19 +63,20 @@ if [  -z ${PUTLOGOCMD+x}  ]; then
    echo PUTLOGOCMD is not set
 else
    echo Putting logos
-   ls ${picture_dir}/*.png |grep -v AQI_ |grep -v POLI_| time aprun -n1 -d28  xargs -n 1 -I XXX -P 28 ${PUTLOGOCMD} XXX XXX  
-   if [  -n ${PUTLOGOCMDINDEX+x}  ]; then
-      #separate logo for AQI
-      ls ${picture_dir}/*[AO][QL]I_???.png | time aprun -n1 -d28  xargs -n 1 -I XXX -P 28 ${PUTLOGOCMDINDEX} XXX XXX  
-   fi
-   #ls ${picture_dir}/*.png | time xargs -n 1 -I XXX -P 20 ${PUTLOGOCMD} XXX XXX  
+   ls ${picture_dir}/*.png |grep -v AQI_ |grep -v POLI_| xargs  -I XXX -P $nproc ${PUTLOGOCMD} XXX XXX  
+#   if [  -n ${PUTLOGOCMDINDEX+x}  ]; then
+#      #separate logo for AQI
+#      ls ${picture_dir}/*[AO][QL]I_???.png | xargs  -I XXX -P $nproc ${PUTLOGOCMDINDEX} XXX XXX  
+#   fi
+   echo compressing pics
+   ls ${picture_dir}/*.png  | xargs  -I XXX -P $nproc convert XXX PNG8:XXX
 fi
 #echo waiting..
 #wait
 
 
 
-echo pics Done!
+echo Done with logos!
 [ -n "$outsuff" ] && exit 0 #No publish for modified runs
 
 
@@ -92,14 +87,25 @@ if $publish; then
        echo removing $d
        rm -rf $d
     done
+    ii=0
+    for d in `find . -type d -name '20??????'|sort -r`; do
+       linkname=`printf  %03d $ii`
+       rm -f $linkname
+       echo ln -s  $d $linkname
+       ln -sf  $d $linkname
+       ii=`expr $ii + 1`  
+    done
+
+    #deploy animation if not yet...
+    if [ ! -d Napit ]; then
+     tar -xvf  $scriptdir/www/Napit.tar
+     rsync -av $scriptdir/www/*.html .
+    fi
+
     popd
-
-    echo Rotatedirs
-    $rotate_dates $outputdir/webloads/$fctype 3
-
-    echo Syncing $outputdir/webloads/$fctype to $fmi_data_path
-    mkdir -p $fmi_data_path
-    $rsync -a --delete  $outputdir/webloads/$fctype $fmi_data_path
+#    echo Syncing $outputdir/webloads/$fctype to $fmi_data_path
+#    mkdir -p $fmi_data_path
+#    $rsync -a --delete  $outputdir/webloads/$fctype $fmi_data_path
 fi
 exit 0
 
