@@ -54,7 +54,7 @@ pwd
 #      ioff=`expr $ioff + 1`
 #    done 
 
-   done | time xargs -t -l -P 6 grads -bpc
+   done | time xargs -t -l -P $nproc grads -bpc
 
 
 # put logo if corresponding command is provided
@@ -97,15 +97,16 @@ if $publish; then
     done
 
     #deploy animation if not yet...
-    if [ ! -d Napit ]; then
+    rsync -av $scriptdir/www/*.html .
+    if [ !  -d Napit ]; then
      tar -xvf  $scriptdir/www/Napit.tar
-     rsync -av $scriptdir/www/*.html .
     fi
 
     popd
-#    echo Syncing $outputdir/webloads/$fctype to $fmi_data_path
+    fmi_data_path=eslogin:/fmi/data/silam.fmi.fi/partners/Bavaria
+    echo Syncing $outputdir/webloads to $fmi_data_path
 #    mkdir -p $fmi_data_path
-#    $rsync -a --delete  $outputdir/webloads/$fctype $fmi_data_path
+    $rsync -a --delete  $outputdir/webloads/$fctype/* $fmi_data_path/
 fi
 exit 0
 
