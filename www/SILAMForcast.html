@@ -79,6 +79,10 @@ function showgif(idx,over) {
   }
 }
 
+function scroll() {
+  showgif( (oldidx+1) % n , 0 );
+}
+
 function doanim() {
   if(!isanim) return;
 
@@ -153,16 +157,21 @@ var tbase = "./Napit/";      // Base name for clock
 
 var oncolor = "red";
 var offcolor = "blue";
-var files = new Array ();
-var times = new Array ();
+var files = new Array ();  // Main pictures 
+var times = new Array ();  //Timebar pictures
+var imin = -48;
+var imax = 48;
 
 var ddd;
 var fff;
                                                      
-   for (i=-96; i<=48; i++) {
+   for (i=imin; i<=imax; i++) {
        if (i>0) {
         ddd = "000";
         fff = i; 
+       } else if(i == imin){ // Allow for 00h for the first pic
+        ddd = "00" + (~~((-i+1)/24));
+        fff = ((i+480 )%24) ;
        } else {
         ddd = "00" + (~~((-i)/24)+1);
         fff = ((i+480 - 1)%24) + 1;
