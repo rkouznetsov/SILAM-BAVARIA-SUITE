@@ -5,7 +5,7 @@ set -o pipefail
 
 umask 0002
 
-nproc=`nproc`
+nproc=8 ##`nproc`
 #nproc="1 echo"  # this disables all xargs calls
 
 # environment: version, family, publish

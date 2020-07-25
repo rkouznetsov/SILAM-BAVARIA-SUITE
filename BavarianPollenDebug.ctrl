@@ -12,14 +12,14 @@ LIST = GENERAL_PARAMETERS
   simulation_type = EULERIAN
 END_LIST = GENERAL_PARAMETERS
 
-LIST = mpi_parallel_parameters
-   x_divisions = 1
-   y_divisions = 1
-   nthreads = ${OMP_NUM_THREADS}
-   use_mpiio = YES
-   use_mpiio_netcdf = YES
-##   max_wind_speed = 100 # [m/s]
-END_LIST = mpi_parallel_parameters
+# LIST = mpi_parallel_parameters
+#    x_divisions = 1
+#    y_divisions = 1
+#    nthreads = ${OMP_NUM_THREADS}
+#    use_mpiio = YES
+#    use_mpiio_netcdf = YES
+# ##   max_wind_speed = 100 # [m/s]
+# END_LIST = mpi_parallel_parameters
 
 
  LIST = dispersion_parameters
@@ -119,7 +119,7 @@ LIST = emission_parameters
    initialize_quantity = advection_moment_z
 
 # From yesterdays run
-  initialization_file = NETCDF   ${OUTPUTDIR}/%ay4%am2%ad2/ALL_SRCS_pollen_%y4%m2%d2%h2.nc
+  initialization_file = NETCDF   ${OUTPUTDIR}/%ay4%am2%ad2/ALL_SRCS_pollen_%y4%m2%d2%h2.nc4
   initialization_file = GRADS    ${OUTPUTDIR}/%ay4%am2%ad2/ALL_SRCS_pollen_%y4%m2%d2%h2_%y4_%m2_%d2_%h2.00.0.0_dump.grads.super_ctl
 #Ini from boundaries : bootstrap
 #  initialization_file = NETCDF   SILAM-bnd/%ay4%am2%ad2%ah2/SILAM4DE%ay4-%am2-%ad2T%ah2:00:00Z_%y4%m2%d2%h2.nc 
@@ -129,7 +129,7 @@ LIST = emission_parameters
    if_top_boundary =  YES             ! YES/NO 
    if_bottom_boundary =  NO          ! YES/NO 
    boundary_time_step =  1 hr        ! timestep unit 
-#   boundary_header_filename = ${scriptdir}/boundary_regional_pollen.ini
+   boundary_header_filename = ${scriptdir}/boundary_regional_pollen.ini
  END_LIST = initial_and_boundary_conditions
 
  LIST = optical_density_parameters ############
