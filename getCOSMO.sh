@@ -49,7 +49,7 @@ ncurls=60
 var3d="clc p qv t tke u v w"
 
 
-staticvar="fc hsurf fis fr_land soiltyp plcov"
+staticvar="fc hsurf fis fr_land soiltyp plcov rootdp"
 staticvarnn="soiltyp"
 staticnotuse="rlat rlon"
 
@@ -65,7 +65,7 @@ relhum  # Rh @pressure level
 #varsfc="alb_rad alhfl_s asob_s asob_t aswdifd_s aswdifu_s aswdir_s cape_con cape_ml clch clcl clcm clct clct_mod cldepth fr_ice h_snow hbas_con htop_con htop_dc hzerocl pmsl ps qv_s rain_con rain_gsp relhum_2m rho_snow snow_con snow_gsp t_2m t_g t_snow td_2m tmax_2m tmin_2m tot_prec u_10m v_10m vmax_10m w_snow ww z0 "
 #varsfc="alb_rad alhfl_s asob_s asob_t aswdifd_s aswdifu_s aswdir_s cape_con cape_ml clch clcl clcm clct clct_mod cldepth h_snow hbas_con htop_con htop_dc hzerocl pmsl ps qv_s rain_con rain_gsp relhum_2m rho_snow snow_con snow_gsp t_2m t_g t_snow td_2m tmax_2m tmin_2m tot_prec u_10m v_10m vmax_10m w_snow ww z0 "
 
-varsfc="alb_rad alhfl_s ashfl_s asob_s asob_t aswdifd_s aswdifu_s aswdir_s cape_ml cin_ml  clch clcl clcm clct clct_mod cldepth dbz_850 dbz_cmax  grau_gsp h_snow hzerocl  mh  pmsl prs_gsp ps  qv_s relhum_2m rho_snow rootdp runoff_g runoff_s sdi_1 sdi_2 snow_gsp snowlmt t_2m t_g t_s t_snow  tch tcm td_2m tot_prec u_10m v_10m w_snow  ww z0"
+varsfc="alb_rad alhfl_s ashfl_s asob_s asob_t aswdifd_s aswdifu_s aswdir_s cape_ml cin_ml  clch clcl clcm clct clct_mod cldepth dbz_850 dbz_cmax  grau_gsp h_snow hzerocl  mh  pmsl prs_gsp ps  qv_s relhum_2m rho_snow runoff_g runoff_s sdi_1 sdi_2 snow_gsp snowlmt t_2m t_g t_s t_snow  tch tcm td_2m tot_prec u_10m v_10m w_snow  ww z0"
 
 varsoil=""
 for soillev in 0 1 3 9 27 81 729; do ###Layers in soil
@@ -98,7 +98,7 @@ if [ ! -f $staticfile ]; then
     done |xargs -P $ncurls  -I XXX sh -c "XXX"
     base=`basename $staticfile`
     nmsg=`ls ${filepref}${fcdate}_*.grib2.bz2| wc -w` 
-    if [ $nmsg =  6 ]; then
+    if [ $nmsg =  7 ]; then
       break
     else
       echo  "nfiles =  $nmsg Retry $itry"
@@ -168,7 +168,7 @@ for step in $steplist; do
       done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesfc failed
       base=`basename $filesfc`
       nmsg=`ls ${filepref}${fcdate}_${step}_*.grib2.bz2|wc -w`
-      if [ $nmsg ==  46 ]; then
+      if [ $nmsg ==  45 ]; then
         break
       else
         echo  "nmsg_sfc =  $nmsg Retry $itry"
