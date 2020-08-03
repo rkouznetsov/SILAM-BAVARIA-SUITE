@@ -11,9 +11,12 @@ fcdate=`date -u -d "3 hours ago" +%Y%m%d%H`
 
 fch=`echo $fcdate |cut -b 9-10`
 if [ $fch -lt 2 ]; then
-  echo $fch is less than 2 hours sonce the forecast lead time.
-  echo "The DWD directory might be updating now. Please try latar."
-  exit -1
+  msg="$fch is less than 2 hours sonce the forecast lead time."
+  msg1="The DWD directory might be updating now. Please try latar."
+    echo $msg
+    echo $msg1
+
+    echo "$msg " | mailx -s "getCOSMO.sh failed  for Bavaria at Haze"  $MAILTO
 fi
 
 
@@ -107,7 +110,9 @@ if [ ! -f $staticfile ]; then
     #nmsg=`grib_ls $base.tmp |grep "total messages" |awk '{print $1;}'`
   done
   if [ $itry -ge 9 ]; then
-    echo "Failed after 9 tries"
+    msg="Failed static after 9 tries"
+    echo $msg
+    echo "$msg " | mailx -s "getCOSMO.sh failed  for Bavaria at Haze"  $MAILTO
     exit 255
   fi
   lbzip2 -dc ${filepref}${fcdate}_*.grib2.bz2 > $base.tmp
@@ -148,7 +153,9 @@ for step in $steplist; do
       # nmsg=`grib_ls $file3d.tmp |grep "total messages" |awk '{print $1;}'`
     done
     if [ $itry -ge 9 ]; then
-      echo "Failed after 9 tries"
+      msg="Failed 3D after 9 tries"
+      echo $msg
+      echo "$msg " | mailx -s "getCOSMO.sh failed  for Bavaria at Haze"  $MAILTO
       exit 255
     fi
     cat ${pref_3d}${fcdate}_${step}_*.grib2.bz2 | lbzip2 -dvc > $file3d 
@@ -168,7 +175,7 @@ for step in $steplist; do
       done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesfc failed
       base=`basename $filesfc`
       nmsg=`ls ${filepref}${fcdate}_${step}_*.grib2.bz2|wc -w`
-      if [ $nmsg ==  45 ]; then
+      if [ $nmsg ==  47 ]; then
         break
       else
         echo  "nmsg_sfc =  $nmsg Retry $itry"
@@ -177,7 +184,9 @@ for step in $steplist; do
       # nmsg=`grib_ls $file3d.tmp |grep "total messages" |awk '{print $1;}'`
     done
     if [ $itry -ge 9 ]; then
-      echo "Failed after 9 tries"
+      msg="Failed sfc after 9 tries"
+      echo $msg
+      echo "$msg " | mailx -s "getCOSMO.sh failed  for Bavaria at Haze"  $MAILTO
       exit 255
     fi
     cat  ${filepref}${fcdate}_*.grib2.bz2 | lbzip2 -dc > $base.tmp 
@@ -215,7 +224,9 @@ for step in $steplist; do
       # nmsg=`grib_ls $file3d.tmp |grep "total messages" |awk '{print $1;}'`
     done
     if [ $itry -ge 9 ]; then
-      echo "Failed after 9 tries"
+      msg="Failed soil after 9 tries"
+      echo $msg
+      echo "$msg " | mailx -s "getCOSMO.sh failed  for Bavaria at Haze"  $MAILTO
       exit 255
     fi
    
