@@ -6,7 +6,6 @@
 
 # Enjoy!
 
-email="dimiter.syrakov@test-k.teho-login1"
 email="test-download-bavaria"
 #email=test
 
