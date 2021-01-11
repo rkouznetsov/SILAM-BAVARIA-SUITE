@@ -83,7 +83,7 @@ LIST = emission_parameters
    surface_resistance_method = STANDARD #WES2013 
    # wet_deposition_scheme = 2018_SCAVENGING
    wet_deposition_scheme = NEW2011_SCAVENGING_FAKECLOUD
-   max_scav_rate_depends_on = CAPE #CAPE
+#   max_scav_rate_depends_on = CAPE #CAPE
    use_dynamic_albedo = YES
     
   if_actual_humidity_for_particle_size = YES
@@ -124,7 +124,7 @@ LIST = emission_parameters
 #Ini from boundaries : bootstrap
 #  initialization_file = NETCDF   SILAM-bnd/%ay4%am2%ad2%ah2/SILAM4DE%ay4-%am2-%ad2T%ah2:00:00Z_%y4%m2%d2%h2.nc 
 
-   boundary_type = ZERO        ! ZERO / DIRICHLET   
+   boundary_type =  ZERO        ! ZERO / DIRICHLET   
    if_lateral_boundary = YES         ! YES/NO 
    if_top_boundary =  YES             ! YES/NO 
    if_bottom_boundary =  NO          ! YES/NO 
