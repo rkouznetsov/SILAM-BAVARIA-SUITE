@@ -6,20 +6,20 @@ LIST = GENERAL_PARAMETERS
   case_name = oper
   direction_in_time = FORWARD
   start_time = ${START_TIME}
-  computed_period = 48 hr
+  computed_period = ${maxhours} hr
   time_step = 6 min
   computation_accuracy = 1
   simulation_type = EULERIAN
 END_LIST = GENERAL_PARAMETERS
 
-LIST = mpi_parallel_parameters
-   x_divisions = 1
-   y_divisions = 1
-   nthreads = ${OMP_NUM_THREADS}
-   use_mpiio = YES
-   use_mpiio_netcdf = YES
-##   max_wind_speed = 100 # [m/s]
-END_LIST = mpi_parallel_parameters
+# LIST = mpi_parallel_parameters
+#    x_divisions = 1
+#    y_divisions = 1
+#    nthreads = ${OMP_NUM_THREADS}
+#    use_mpiio = YES
+#    use_mpiio_netcdf = YES
+# ##   max_wind_speed = 100 # [m/s]
+# END_LIST = mpi_parallel_parameters
 
 
  LIST = dispersion_parameters
@@ -49,10 +49,10 @@ END_LIST = mpi_parallel_parameters
 
 LIST = emission_parameters
 
-   emission_source = EULERIAN emis/pollen/src_pollen_birch.ini
+#   emission_source = EULERIAN emis/pollen/src_pollen_birch.ini
 #   emission_source = EULERIAN emis/pollen/src_pollen_grass.ini
 #   emission_source = EULERIAN emis/pollen/src_pollen_olive.ini
-#   emission_source = EULERIAN emis/pollen/src_pollen_ragweed.ini
+   emission_source = EULERIAN emis/pollen/src_pollen_ragweed.ini
 #   emission_source = EULERIAN emis/pollen/src_pollen_alder.ini
 #   emission_source = EULERIAN emis/pollen/src_pollen_mugwort.ini
    
@@ -83,7 +83,7 @@ LIST = emission_parameters
    surface_resistance_method = STANDARD #WES2013 
    # wet_deposition_scheme = 2018_SCAVENGING
    wet_deposition_scheme = NEW2011_SCAVENGING_FAKECLOUD
-   max_scav_rate_depends_on = CAPE #CAPE
+#   max_scav_rate_depends_on = CAPE #CAPE
    use_dynamic_albedo = YES
     
   if_actual_humidity_for_particle_size = YES
@@ -119,12 +119,12 @@ LIST = emission_parameters
    initialize_quantity = advection_moment_z
 
 # From yesterdays run
-#  initialization_file = NETCDF   ${OUTPUTDIR}/%ay4%am2%ad2/ALL_SRCS_pollen_%y4%m2%d2%h2.nc
-#  initialization_file = GRADS    ${OUTPUTDIR}/%ay4%am2%ad2/ALL_SRCS_pollen_%y4%m2%d2%h2_%y4_%m2_%d2_%h2.00.0.0_dump.grads.super_ctl
+  initialization_file = NETCDF   ${OUTPUTDIR}/%ay4%am2%ad2/ALL_SRCS_pollen_%y4%m2%d2%h2.nc4
+  initialization_file = GRADS    ${OUTPUTDIR}/%ay4%am2%ad2/ALL_SRCS_pollen_%y4%m2%d2%h2_%y4_%m2_%d2_%h2.00.0.0_dump.grads.super_ctl
 #Ini from boundaries : bootstrap
-  initialization_file = NETCDF   SILAM-bnd/%ay4%am2%ad2%ah2/SILAM4DE%ay4-%am2-%ad2T%ah2:00:00Z_%y4%m2%d2%h2.nc 
+#  initialization_file = NETCDF   SILAM-bnd/%ay4%am2%ad2%ah2/SILAM4DE%ay4-%am2-%ad2T%ah2:00:00Z_%y4%m2%d2%h2.nc 
 
-   boundary_type =  DIRICHLET        ! ZERO / DIRICHLET   
+   boundary_type =  ZERO        ! ZERO / DIRICHLET   
    if_lateral_boundary = YES         ! YES/NO 
    if_top_boundary =  YES             ! YES/NO 
    if_bottom_boundary =  NO          ! YES/NO 
@@ -146,7 +146,7 @@ LIST = emission_parameters
    layer_thickness = 25. 50. 100. 200. 400. 750. 1200. 2000. 2000. 2000.   # output levels [m]/[pa]/[hybrid_nbr], reals
    output_time_step = 1 hr
    output_times = REGULAR 
-   output_format = NETCDF3
+   output_format = NETCDF4
   #output_format = grads
    time_split = HOURLY_NEW_FILE 
    template =  ${OUTPUTDIR}/${fcdate}${outsuff}/%source_pollen_%y4%m2%d2%h2
@@ -156,26 +156,22 @@ LIST = emission_parameters
 
    grid_method = CUSTOM_GRID     # METEO_GRID / EMISSION_GRID / OUTPUT_GRID / CUSTOM_GRID
  grid_type = lon_lat
-   grid_title = MEPS2020rll grid
+   grid_title = COSMOrll grid
    resol_flag = 128
    ifReduced = 0 
    earth_flag = 0
    wind_component = 0 
    reduced_nbr_str = 0 
-  # Meps domain with sea and south cut out
+  # COSMO domain with some cut out
   lat_start = -4 
    lon_start = -4
-   dx = 0.04
-   dy = 0.04
-   nx = 201   # 
-   ny = 251 
+   dx = 0.02
+   dy = 0.02
+   nx = 401   # 
+   ny = 501 
 
-    #lon0 to 0th meridian
-    #lat0 to equator
    lat_s_pole = -40
    lon_s_pole = 10.
-#   lat_s_pole = -30.
-#   lon_s_pole = 20.
    lat_pole_stretch = 0.
    lon_pole_stretch = 0.
  END_LIST = output_parameters
