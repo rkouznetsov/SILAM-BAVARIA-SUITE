@@ -83,7 +83,7 @@ LIST = emission_parameters
    surface_resistance_method = STANDARD #WES2013 
    # wet_deposition_scheme = 2018_SCAVENGING
    wet_deposition_scheme = NEW2011_SCAVENGING_FAKECLOUD
-   max_scav_rate_depends_on = CAPE #CAPE
+#   max_scav_rate_depends_on = CAPE #CAPE
    use_dynamic_albedo = YES
     
   if_actual_humidity_for_particle_size = YES
