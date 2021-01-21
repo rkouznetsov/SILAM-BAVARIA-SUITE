@@ -32,8 +32,8 @@ cd $targetdir
 #echo $SHELL
 #exit 1
 
-runpref=silam_europe_pollen_v5_7-TopSecret_RUN_
-urlbase="http://silam.fmi.fi/thredds/ncss/silam_europe_pollen_v5_7-TopSecret/runs/$runpref"
+runpref=silam_europe_pollen_v5_7_1-TopSecret_RUN_
+urlbase="http://silam.fmi.fi/thredds/ncss/silam_europe_pollen_v5_7_1-TopSecret/runs/$runpref"
 
 pollens="POLLEN_ALDER_m22 POLLEN_BIRCH_m22 POLLEN_GRASS_m32 POLLEN_MUGWORT_m18 POLLEN_OLIVE_m28 POLLEN_RAGWEED_m18"
 
