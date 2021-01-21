@@ -7,7 +7,10 @@ cd $scriptdir
 
 testfile=output/webloads/pollen/$fcdate/ragweed_srf_048.png
 
-sleep 7200
+for i in `seq 720`; do
+  sleep 10
+  echo `date`, sleeping 
+done  
 
 if [ ! -f $testfile ] ; then
    msg="Moded  run Bavaria at Haze has not complete within 2 hours, missing file after 2 hours $testfile"
