@@ -10,6 +10,7 @@ testfile=output/webloads/pollen/$fcdate/ragweed_srf_048.png
 for i in `seq 720`; do
   sleep 10
   echo `date`, sleeping 
+  [ -f $testfile ] && exit 0
 done  
 
 if [ ! -f $testfile ] ; then
