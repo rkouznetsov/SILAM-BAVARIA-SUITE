@@ -9,7 +9,8 @@ export fctype=pollen
 
 export MAILTO="rostislav.kouznetsov@fmi.fi"
 export COSMO_PATH=${scriptdir}/COSMO-meteo
-export METEO_DIR=${COSMO_PATH}
+export ICON_PATH=${scriptdir}/ICON-d2-meteo
+export METEO_DIR=${ICON_PATH}
 #export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnumpi # MPI run
 export silam_binary=${scriptdir}/../silam-model/bin/silam_v5_7.gnu    # serial run
 #export silam_binary=/home/kouzne/SILAM/silamgit/bin/silam_v5_7.gnu
