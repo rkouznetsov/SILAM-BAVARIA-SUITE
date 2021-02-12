@@ -33,10 +33,10 @@ END_LIST = GENERAL_PARAMETERS
 #   static_meteo_file = NETCDF:MEPS_RLL2018  /lustre/apps/silam/input/physiography/MEPS_vegfr_mbr2_v3_rllext.nc ##Fraction of vegetation
 #/lustre/apps/silam/input/physiography/MEPS_vegfr_mbr2_v3_rll.nc  
    
-   static_meteo_file  = GRIB COSMO-meteo/%ay4%am2%ad2%ah2/cosmo-d2_germany_rotated-lat-lon_time-invariant_%ay4%am2%ad2%ah2.grib2
+   static_meteo_file  = GRIB ICON-d2-meteo/%ay4%am2%ad2%ah2/icon-d2_germany_regular-lat-lon_time-invariant_%ay4%am2%ad2%ah2.grib2
 
-   dynamic_meteo_file = GRIB COSMO-meteo/%ay4%am2%ad2%ah2/cosmo-d2_germany_rotated-lat-lon_single-level_%ay4%am2%ad2%ah2+%f3.grib2
-   dynamic_meteo_file = GRIB COSMO-meteo/%ay4%am2%ad2%ah2/cosmo-d2_germany_rotated-lat-lon_hybrid-level_%ay4%am2%ad2%ah2+%f3.grib2
+   dynamic_meteo_file = GRIB ICON-d2-meteo/%ay4%am2%ad2%ah2/icon-d2_germany_regular-lat-lon_single-level_%ay4%am2%ad2%ah2+%f3.grib2
+   dynamic_meteo_file = GRIB ICON-d2-meteo/%ay4%am2%ad2%ah2/icon-d2_germany_regular-lat-lon_hybrid-level_%ay4%am2%ad2%ah2+%f3.grib2
 
 #   static_meteo_file = GRADS /lustre/apps/silam/input/emis/v5/salinity_map_global_1deg.fld_water_salinity.grads.super_ctl
    meteo_time_step = 1 hr 

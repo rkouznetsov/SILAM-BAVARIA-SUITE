@@ -27,6 +27,8 @@ targetdir=$BND_PATH/`date -u -d "$basedate" +%Y%m%d00`
 mkdir -p $targetdir
 cd $targetdir
 
+echo `date` Getting  boundaries to  $targetdir
+
 
 
 #echo $SHELL
@@ -90,10 +92,10 @@ done
 
 
 if [ -z "$missfiles" ]; then
-  echo "Finished okay after $try attempts"
+  echo "`date` Finished okay after $try attempts"
   exit 0
 else
-  echo Failed!
+  echo `date` Failed!
   exit 255
 fi
 

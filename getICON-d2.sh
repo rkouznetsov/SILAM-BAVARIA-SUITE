@@ -7,7 +7,7 @@ set -u
 set -e
 #set -x 
 
-fcdate=`date -u -d "3 hours ago" +%Y%m%d%H`
+fcdate=`date -u -d "23 hours ago" +%Y%m%d%H`
 
 fch=`echo $fcdate |cut -b 9-10`
 if [ $fch -lt 2 ]; then
@@ -51,7 +51,7 @@ ncurls=60
 var3d="clc p qv t tke u v w"
 
 
-staticvar="fr_lake fr_land fr_ice hsurf soiltyp plcov lai"
+staticvar="fr_lake fr_land fr_ice hsurf soiltyp plcov lai rootdp depth_lk"
 staticvarnn="soiltyp"
 staticnotuse="elat elon clat clon"
 
@@ -65,13 +65,14 @@ relhum  # Rh @pressure level
 "
 
 #varsfc="alb_rad alhfl_s asob_s asob_t aswdifd_s aswdifu_s aswdir_s cape_con cape_ml clch clcl clcm clct clct_mod cldepth fr_ice h_snow hbas_con htop_con htop_dc hzerocl pmsl ps qv_s rain_con rain_gsp relhum_2m rho_snow snow_con snow_gsp t_2m t_g t_snow td_2m tmax_2m tmin_2m tot_prec u_10m v_10m vmax_10m w_snow ww z0 "
-varsfc="alb_rad alhfl_s asob_s asob_t aswdifd_s aswdifu_s aswdir_s cape_ml clch clcl clcm clct clct_mod cldepth h_snow hbas_sc htop_sc htop_dc hzerocl pmsl ps qv_s rain_con rain_gsp relhum_2m rho_snow snow_con snow_gsp t_2m t_g t_snow td_2m tmax_2m tmin_2m tot_prec u_10m v_10m vmax_10m w_snow ww z0 "
+varsfc="alb_rad alhfl_s apab_s ashfl_s asob_s asob_t aswdifd_s aswdifu_s aswdir_s athb_s athb_t aumfl_s avmfl_s c_t_lk cape_ml ceiling cin_ml  clch clcl clcm clct clct_mod cldepth dbz_850 dbz_cmax echotop freshsnw grau_gsp h_ice h_ml_lk h_snow hbas_sc htop_sc htop_dc hzerocl lpi lpi_max mh pmsl ps qv_s rain_con rain_gsp relhum_2m rho_snow runoff_g runoff_s sdi_2 snow_con snow_gsp snowc snowlmt synmsg_bt_cl_ir10.8 synmsg_bt_cl_wv6.2 t_2m t_bot_lk t_g t_ice t_mnw_lk t_snow t_wml_lk tcond10_mx tcond_max td_2m tmax_2m tmin_2m tot_prec tqc tqc_dia tqg tqi tqi_dia tqr tqs tqv tqv_dia twater u_10m v_10m vmax_10m w_i w_snow ww z0 "
+#varsfc="alb_rad alhfl_s apab_s ashfl_s asob_s asob_t aswdifd_s aswdifu_s aswdir_s athb_s athb_t aumfl_s avmfl_s c_t_lk cape_ml ceiling cin_ml clc clch clcl clcm clct clct_mod cldepth dbz_850 dbz_cmax echotop freshsnw grau_gsp h_ice h_ml_lk h_snow hbas_sc htop_sc htop_dc hzerocl lpi lpi_max mh pmsl ps qv_s rain_con rain_gsp relhum_2m rho_snow runoff_g runoff_s sdi_2 snow_con snow_gsp snowc snowlmt synmsg_bt_cl_ir10.8 synmsg_bt_cl_wv6.2 t_2m t_bot_lk t_g t_ice t_mnw_lk t_snow t_wml_lk tch tcm tcond10_mx tcond_max td_2m tmax_2m tmin_2m tot_prec tqc tqc_dia tqg tqi tqi_dia tqr tqs tqv tqv_dia twater u_10m v_10m vmax_10m w_i w_snow ww z0 "
 
 #varsfc="alb_rad alhfl_s ashfl_s asob_s asob_t aswdifd_s aswdifu_s aswdir_s cape_ml cin_ml  clch clcl clcm clct clct_mod cldepth dbz_850 dbz_cmax  grau_gsp h_snow hzerocl  mh  pmsl prs_gsp ps  qv_s relhum_2m rho_snow rootdp runoff_g runoff_s sdi_1 sdi_2 snow_gsp snowlmt t_2m t_g t_s t_snow  tch tcm td_2m tot_prec u_10m v_10m w_snow  ww z0"
 
 varsoil=""
-for soillev in 0 1 3 9 27 81 729; do ###Layers in soil
-  varsoil="$varsoil ${soillev}_w_so"
+for soillev in 0 1 3 9 27 81 243 729; do ###Layers in soil
+  varsoil="$varsoil ${soillev}_w_so ${soillev}_w_so_ice ${soillev}_smi"
 done
 for soillev in 0 2 6 18 54 162 486 1458; do  ##levels in soil
   varsoil="$varsoil ${soillev}_t_so"
@@ -104,7 +105,7 @@ if [ ! -f $staticfile ]; then
     nmsg=`ls ${filepref}${fcdate}_*.grib2.bz2| wc -w` 
 #https://opendata.dwd.de/weather/nwp/icon-d2/grib/03/plcov/icon-d2_germany_regular-lat-lon_time-invariant_2021021103_000_0_plcov.grib2.bz2
 #https://opendata.dwd.de/weather/nwp/icon-d2/grib/03/plcov/icon-d2_germany_regular-lat-lon_time-invariant_2021021103_plcov.grib2.bz2
-    if [ $nmsg ==  7 ]; then
+    if [ $nmsg ==  9 ]; then
       break
     else
       echo  "nfiles =  $nmsg Retry $itry"
@@ -149,7 +150,7 @@ for step in $steplist; do
           [ -s $destfile  ] && continue
           echo "curl -s --max-time 40 -f $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile} && echo ${destfile} Done, try $itry || echo ${destfile} Failed, try $itry.."
         done
-      done | xargs -P $ncurls  -I XXX -t sh -c "XXX" || echo Some curls for $file3dh failed
+      done | xargs -P $ncurls  -I XXX  sh -c "XXX" || echo Some curls for $file3dh failed
       
       base=`basename $file3dh`
       nmsg=`ls ${pref_3d}${fcdate}_${step}_*.grib2.bz2|wc -w`
@@ -166,7 +167,8 @@ for step in $steplist; do
       echo "$msg " | mailx -s "getCOSMO.sh failed  for Bavaria at Haze"  $MAILTO
       exit 255
     fi
-    cat ${pref_3d}${fcdate}_${step}_*.grib2.bz2 | lbzip2 -dvc > $file3d.tmp
+    cat ${pref_3d}${fcdate}_${step}_*.grib2.bz2 | lbzip2 -dvc > $base
+    grib_set -w edition=2 -s packingType=grid_ccsds  $base $file3d.tmp
     mv $file3d.tmp $file3d
     rm ${pref_3d}${fcdate}_*.grib2.bz2
     ## FIXME
@@ -185,7 +187,7 @@ for step in $steplist; do
       done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesfc failed
       base=`basename $filesfc`
       nmsg=`ls ${filepref}${fcdate}_${step}_*.grib2.bz2|wc -w`
-      if [ $nmsg ==  41 ]; then
+      if [ $nmsg ==  84 ]; then
         break
       else
         echo  "nmsg_sfc =  $nmsg Retry $itry"
@@ -229,7 +231,7 @@ for step in $steplist; do
 
       base=`basename $filesoil .bz2`
       nmsg=`ls ${filepref}${fcdate}_${step}_*.grib2.bz2|wc -w`
-      if [ $nmsg ==  15 ]; then
+      if [ $nmsg ==  24 ]; then
         break
       else
         echo  "nmsg_soil =  $nmsg Retry $itry"
