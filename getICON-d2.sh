@@ -7,7 +7,7 @@ set -u
 set -e
 #set -x 
 
-fcdate=`date -u -d "23 hours ago" +%Y%m%d%H`
+fcdate=`date -u -d "3 hours ago" +%Y%m%d%H`
 
 fch=`echo $fcdate |cut -b 9-10`
 if [ $fch -lt 2 ]; then
@@ -135,8 +135,8 @@ steplist="`seq -f %03.0f 1 45`"
 for step in $steplist; do
   file3dh=$outdir/${pref_3dh}${fcdate}+${step}.grib2 #final file in hybrid
   file3d=$outdir/${pref_3d}${fcdate}+${step}.grib2
-  #if [ ! -f $file3dh ]; then ## FIXME
-  if [ ! -f $file3d ]; then
+  if [ ! -f $file3dh ]; then 
+    echo Getting stuff to `pwd`
     for itry in `seq 1 10`; do
       for v in $var3d; do
         V=$v #`echo $v | tr  '[:lower:]' '[:upper:]'`
@@ -148,9 +148,18 @@ for step in $steplist; do
         for lev in `seq 1 $maxlev`; do
           destfile=${pref_3d}${fcdate}_${step}_${lev}_${V}.grib2.bz2
           [ -s $destfile  ] && continue
+# patch for missing file          
+#          if [ $itry -gt 3 ]; then 
+#            if [ $destfile == "icon-d2_germany_regular-lat-lon_model-level_2021102003_015_63_tke.grib2.bz2" ]; then
+#              moldfile=icon-d2_germany_regular-lat-lon_model-level_2021102003_015_62_tke.grib2.bz2
+#              destbase=`basename  $destfile .bz2` 
+#              echo "lbzip2 -dc $moldfile > delme && grib_set -s scaledValueOfFirstFixedSurface=63  delme $destbase && lbzip2 $destbase  && rm delme && echo Recovered $destfile"
+#              continue
+#            fi
+#          fi 
           echo "curl -s --max-time 40 -f $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile} && echo ${destfile} Done, try $itry || echo ${destfile} Failed, try $itry.."
         done
-      done | xargs -P $ncurls  -I XXX  sh -c "XXX" || echo Some curls for $file3dh failed
+      done | xargs -P $ncurls -I XXX  sh -c "XXX" || echo Some curls for $file3dh failed
       
       base=`basename $file3dh`
       nmsg=`ls ${pref_3d}${fcdate}_${step}_*.grib2.bz2|wc -w`
@@ -171,9 +180,8 @@ for step in $steplist; do
     grib_set -w edition=2 -s packingType=grid_ccsds  $base $file3d.tmp
     mv $file3d.tmp $file3d
     rm ${pref_3d}${fcdate}_*.grib2.bz2
-    ## FIXME
-    #$scriptdir/tools/COSMO-d2-2hybrid $file3d $base
-    #mv $base $file3dh
+    $scriptdir/tools/ICON-d2-2hybrid $file3d $base
+    mv $base $file3dh
   fi
 
   filepref=$pref_sfc
