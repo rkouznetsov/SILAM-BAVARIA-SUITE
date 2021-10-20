@@ -34,8 +34,9 @@ echo `date` Getting  boundaries to  $targetdir
 #echo $SHELL
 #exit 1
 
-runpref=silam_europe_pollen_v5_7_1-TopSecret_RUN_
-urlbase="http://silam.fmi.fi/thredds/ncss/silam_europe_pollen_v5_7_1-TopSecret/runs/$runpref"
+#thredds/ncss/silam_europe_pollen_v5_7_1-TopSecret/runs/silam_europe_pollen_v5_7_1-TopSecret_RUN_2021-06-07T00:00:00Z
+runpref=silam_europe_pollen_v5_7_2_RUN_
+urlbase="http://silam.fmi.fi/thredds/ncss/silam_europe_pollen_v5_7_2/runs/$runpref"
 
 pollens="POLLEN_ALDER_m22 POLLEN_BIRCH_m22 POLLEN_GRASS_m32 POLLEN_MUGWORT_m18 POLLEN_OLIVE_m28 POLLEN_RAGWEED_m18"
 
