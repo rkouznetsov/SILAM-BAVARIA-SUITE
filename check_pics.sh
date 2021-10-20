@@ -8,7 +8,7 @@ cd $scriptdir
 testfile=output/webloads/pollen/$fcdate/ragweed_srf_048.png
 
 for i in `seq 720`; do
-  sleep 10
+  sleep 20
   echo `date`, sleeping 
   [ -f $testfile ] && exit 0
 done  
