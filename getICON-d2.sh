@@ -148,7 +148,10 @@ for step in $steplist; do
         for lev in `seq 1 $maxlev`; do
           destfile=${pref_3d}${fcdate}_${step}_${lev}_${V}.grib2.bz2
           [ -s $destfile  ] && continue
-# patch for missing file          
+          
+          patchfile=$scriptdir/`basename ${destfile}`
+          [ -f $patchfile ] && cp $patchfile ${destfile} && continue ### FIXME A hook to pick up a patch from $scriptdir
+# patch for missing file           
 #          if [ $itry -gt 3 ]; then 
 #            if [ $destfile == "icon-d2_germany_regular-lat-lon_model-level_2021102003_015_63_tke.grib2.bz2" ]; then
 #              moldfile=icon-d2_germany_regular-lat-lon_model-level_2021102003_015_62_tke.grib2.bz2
