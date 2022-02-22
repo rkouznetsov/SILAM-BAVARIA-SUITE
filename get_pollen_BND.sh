@@ -45,7 +45,11 @@ varlist="daymean_temp2m,temp_2m_acc"
 
 for pol in $pollens; do
   for var in $pollenvars; do
-    varlist="$varlist,${var}_${pol}"
+    newvar=${var}_${pol}
+    echo $newvar | grep 'heatsum_POLLEN_GRASS_m32\|heatsum_POLLEN_MUGWORT_m18\|poll_tot_m2_POLLEN_MUGWORT_m18\|pollen_corr_POLLEN_MUGWORT_m18' >/dev/null && continue
+
+    varlist="$varlist,${newvar}"
+
   done
 done
 
