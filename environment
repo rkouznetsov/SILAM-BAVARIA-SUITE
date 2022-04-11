@@ -12,7 +12,7 @@ export COSMO_PATH=${scriptdir}/COSMO-meteo
 export ICON_PATH=${scriptdir}/ICON-d2-meteo
 export METEO_DIR=${ICON_PATH}
 #export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnumpi # MPI run
-export silam_binary=${scriptdir}/../silam-model/bin/silam_v5_7.gnu    # serial run
+export silam_binary=${scriptdir}/../silam-model/bin/silam_v5_8pub.gnu    # serial run
 #export silam_binary=/home/kouzne/SILAM/silamgit/bin/silam_v5_7.gnu
 
 #export boundary_path="/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/Boundary conditions, SILAM, strt01.10.19"

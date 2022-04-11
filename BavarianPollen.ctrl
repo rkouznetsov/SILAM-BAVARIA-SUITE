@@ -56,6 +56,8 @@ LIST = emission_parameters
    emission_source = EULERIAN emis/pollen/src_pollen_alder.ini
    emission_source = EULERIAN emis/pollen/src_pollen_mugwort.ini
    
+   emission_source = EULERIAN emis/pollen/mugw5/src_pollen_mugwort_all_like_grass.ini
+   
 #   source_dump_time_step = 1 hr
 #   #source_dump_start_time
 #   #source_dump_end_time

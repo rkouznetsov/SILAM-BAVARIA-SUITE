@@ -38,15 +38,15 @@ echo `date` Getting  boundaries to  $targetdir
 runpref=silam_europe_pollen_v5_8_RUN_
 urlbase="http://silam.fmi.fi/thredds/ncss/silam_europe_pollen_v5_8/runs/$runpref"
 
-pollens="POLLEN_ALDER_m22 POLLEN_BIRCH_m22 POLLEN_GRASS_m32 POLLEN_MUGWORT_m18 POLLEN_OLIVE_m28 POLLEN_RAGWEED_m18"
+pollens="POLLEN_ALDER_m22 POLLEN_BIRCH_m22 POLLEN_GRASS_m32 POLLEN_MUGWORT_m18 POLLEN_MUGW1_m18 POLLEN_MUGW2_m18 POLLEN_MUGW3_m18 POLLEN_MUGW4_m18 POLLEN_MUGW5_m18 POLLEN_OLIVE_m28 POLLEN_RAGWEED_m18"
 
-pollenvars="Poll_Rdy2fly heatsum poll_left poll_tot_m2 pollen_corr  cnc"
+pollenvars="Poll_Rdy2fly heatsum poll_left poll_tot_m2 pollen_corr cnc"
 varlist="daymean_temp2m,temp_2m_acc"
 
 for pol in $pollens; do
   for var in $pollenvars; do
     newvar=${var}_${pol}
-    echo $newvar | grep 'heatsum_POLLEN_GRASS_m32\|heatsum_POLLEN_MUGWORT_m18\|poll_tot_m2_POLLEN_MUGWORT_m18\|pollen_corr_POLLEN_MUGWORT_m18' >/dev/null && continue
+    echo $newvar | grep 'heatsum_POLLEN_GRASS_m32\|heatsum_POLLEN_MUGW\|poll_tot_m2_POLLEN_MUGW\|pollen_corr_POLLEN_MUGW' >/dev/null && continue
 
     varlist="$varlist,${newvar}"
 
