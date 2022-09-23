@@ -10,6 +10,7 @@ LIST = GENERAL_PARAMETERS
   time_step = 2 min
   computation_accuracy = 5
   simulation_type = EULERIAN
+   progress_file_name = CMD ${progresscmd}
 END_LIST = GENERAL_PARAMETERS
 
 # LIST = mpi_parallel_parameters

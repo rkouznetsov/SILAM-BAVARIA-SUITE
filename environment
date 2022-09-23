@@ -7,7 +7,6 @@ export scriptdir
 
 export fctype=pollen
 
-export MAILTO="rostislav.kouznetsov@fmi.fi"
 export COSMO_PATH=${scriptdir}/COSMO-meteo
 export ICON_PATH=${scriptdir}/ICON-d2-meteo
 export METEO_DIR=${ICON_PATH}
@@ -18,6 +17,17 @@ export silam_binary=${scriptdir}/../silam-model/bin/silam_v5_8pub.gnu    # seria
 #export boundary_path="/media/yury/c9152749-9c88-4b8c-8bf9-a2c17c62f585/Boundary conditions, SILAM, strt01.10.19"
 #export boundary_path="/media/disk-6T/BoundariesFMI"
 #export OMP_NUM_THREADS=8
+if [ -n "${ECF_NAME}" ]; then 
+  echo "Running form ecflow"
+  export progresscmd="ecflow_client --meter=progress"
+  #export MAILTO="rostislav.kouznetsov@fmi.fi,mikhail.sofiev@fmi.fi"
+  export MAILTO="rostislav.kouznetsov@fmi.fi"
+
+else
+  echo "Running standalone: no mail!"
+  export progresscmd="echo NON_OPER_PROGRESS"
+  export MAILTO=""
+fi
 
 #export ny=1 ## Number of MPI tasks
 export OUTPUTDIR=${scriptdir}/output
