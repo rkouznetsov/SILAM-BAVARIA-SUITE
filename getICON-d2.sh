@@ -19,7 +19,9 @@ if [ $fch -lt 2 ]; then
     echo "$msg " | mailx -s "getCOSMO.sh failed  for Bavaria at Haze"  $MAILTO
 fi
 
-
+# -k to ugnore the failure of ssl sertificte
+curl="curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70"
+#curl="curl -k -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70"
 
 #fcdate=2019120512
 
@@ -98,7 +100,7 @@ if [ ! -f $staticfile ]; then
       destfile=${filepref}${fcdate}_000_0_${V}.grib2.bz2
       [ -s $destfile  ] && continue
 
-      echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile} && echo ${destfile} Done, try $itry || echo ${destfile} Failed, try $itry.."
+      echo "$curl $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile} && echo ${destfile} Done, try $itry || echo ${destfile} Failed, try $itry.."
       >&2 echo "curl --verbose   -f $urlpref/$v/$destfile -o $destfile"
     done |xargs -P $ncurls  -I XXX sh -c "XXX"
     base=`basename $staticfile`
@@ -160,7 +162,7 @@ for step in $steplist; do
 #              continue
 #            fi
 #          fi 
-          echo "curl -s --max-time 40 -f $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile} && echo ${destfile} Done, try $itry || echo ${destfile} Failed, try $itry.."
+          echo "$curl $urlpref/$v/$destfile -o ${destfile}.tmp && mv ${destfile}.tmp ${destfile} && echo ${destfile} Done, try $itry || echo ${destfile} Failed, try $itry.."
         done
       done | xargs -P $ncurls -I XXX  sh -c "XXX" || echo Some curls for $file3dh failed
       
@@ -194,7 +196,7 @@ for step in $steplist; do
       for v in $varsfc; do
         V=$v #`echo $v | tr  '[:lower:]' '[:upper:]'`
           destfile=${filepref}${fcdate}_${step}_2d_${V}.grib2.bz2
-          [ -f $destfile ] || echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$v/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
+          [ -f $destfile ] || echo "$curl $urlpref/$v/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
       done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesfc failed
       base=`basename $filesfc`
       nmsg=`ls ${filepref}${fcdate}_${step}_*.grib2.bz2|wc -w`
@@ -237,7 +239,7 @@ for step in $steplist; do
         V=$v #`echo $v | tr  '[:lower:]' '[:upper:]'`
           destfile=${filepref}${fcdate}_${step}_${V}.grib2.bz2
           vtmp=`echo $v| sed -e 's/.*_w_so/w_so/' -e 's/.*_t_so/t_so/'`  ##Cut soil level from varname
-          [ -f $destfile ] || echo "curl -s -f --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 70 $urlpref/$vtmp/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
+          [ -f $destfile ] || echo "$curl $urlpref/$vtmp/$destfile -o $destfile.tmp && mv ${destfile}.tmp ${destfile}"
       done | xargs -P $ncurls -t -I XXX sh -c "XXX" || echo Some curls for $filesoil failed
 
       base=`basename $filesoil .bz2`
