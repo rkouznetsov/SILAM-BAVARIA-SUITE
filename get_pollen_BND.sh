@@ -26,6 +26,7 @@ BND_PATH=SILAM-bnd
 targetdir=$BND_PATH/`date -u -d "$basedate" +%Y%m%d00`
 mkdir -p $targetdir
 cd $targetdir
+#cd `/bin/pwd` ## Containers have hard time with home directories
 
 echo `date` Getting  boundaries to  $targetdir
 
@@ -36,7 +37,8 @@ echo `date` Getting  boundaries to  $targetdir
 
 #thredds/ncss/silam_europe_pollen_v5_7_1-TopSecret/runs/silam_europe_pollen_v5_7_1-TopSecret_RUN_2021-06-07T00:00:00Z
 runpref=silam_europe_pollen_v5_8_RUN_
-urlbase="http://silam.fmi.fi/thredds/ncss/silam_europe_pollen_v5_8/runs/$runpref"
+#urlbase="http://silam.fmi.fi/thredds/ncss/silam_europe_pollen_v5_8/runs/$runpref"
+urlbase="http://thredds.silam.fmi.fi/thredds/ncss/grid/silam_europe_pollen_v5_8/runs/$runpref"
 
 pollens="POLLEN_ALDER_m22 POLLEN_BIRCH_m22 POLLEN_GRASS_m32 POLLEN_MUGWORT_m18 POLLEN_MUGW1_m18 POLLEN_MUGW2_m18 POLLEN_MUGW3_m18 POLLEN_MUGW4_m18 POLLEN_MUGW5_m18 POLLEN_OLIVE_m28 POLLEN_RAGWEED_m18"
 
@@ -78,21 +80,25 @@ for try  in `seq 0 10`; do
         time=`date -u -d"$basedate + $hr hours" +"%FT%H:00:00Z"`
         outf=`date -u -d"$basedate + $hr hours" +"SILAM4DE${run}_%Y%m%d%H.nc"`
         [ -f $outf ] && continue
+        [ -f ${outf}.tmp ] && rm ${outf}.tmp 
          missfiles="$missfiles $outf"
 
 
-        URL="$urlbase$run?var=$varlist&$bbox&temporal=range&time_start=$time&time_end=$time&accept=netcdf&email=$email"
+        URL="$urlbase$run?var=$varlist&$bbox&temporal=range&time_start=$time&time_end=$time&accept=netcdf3&email=$email"
 #        echo wget \"$URL\"
 #        exit
         #
         # For some reason thredds does not supply _CoordinateModelRunDate anymore
-        attcmd="-a _CoordinateModelRunDate,global,c,c,$run ${outf}.tmp -a history,global,d,,, -a history_of_appended_files,global,d,,,"
-        (wget -q $URL -O ${outf}.tmp && ncatted -h $attcmd && $ncks -h --mk_rec_dmn time ${outf}.tmp $outf && rm ${outf}.tmp && echo  $outf done!) &
+        echo Launching ${outf} 
+        attcmd="-a _CoordinateModelRunDate,global,c,c,$run -a history,global,d,,, -a history_of_appended_files,global,d,,,"
+        (wget  $URL -O ${outf}.tmp && ncatted -h $attcmd ${outf}.tmp && $ncks -4 -L5 --cnk_plc g2d -h --mk_rec_dmn time ${outf}.tmp $outf && rm ${outf}.tmp && echo  $outf done!) &
         while [ `jobs | wc -l` -ge $maxjobs ]; do sleep 1; done
 
    done
    wait
    [ -z "$missfiles" ] && break
+   echo "Missing files after try $try:"
+   echo $missfiles
 done
 
 
