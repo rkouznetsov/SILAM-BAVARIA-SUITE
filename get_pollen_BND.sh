@@ -69,6 +69,16 @@ bbox="spatial=bb&north=56&west=4&east=16&south=46"
 
 maxjobs=4
 
+## Fri 23 Sep 2022 02:15:55 PM EEST, thredds 5.5 after fix 
+# https://github.com/Unidata/tds/issues/286
+# maxjobs, Faied files  at first round, total time
+#  2           1   2:28
+#  4           4   1:18
+#  8           10  0:49
+#
+#
+
+
 # make dates
 run=`date -u -d $basedate +"%FT00:00:00Z"`
 
