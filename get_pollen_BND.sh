@@ -35,8 +35,10 @@ echo `date` Getting  boundaries to  $targetdir
 #echo $SHELL
 #exit 1
 
-runpref=silam_europe_pollen_v5_8_RUN_
-urlbase="http://thredds.silam.fmi.fi/thredds/ncss/grid/silam_europe_pollen_v5_8/runs/$runpref"; ncver="3"
+runpref=silam_europe_pollen_v5_8_1_RUN_
+urlbase="http://thredds.silam.fmi.fi/thredds/ncss/grid/silam_europe_pollen_v5_8_1/runs/$runpref"; ncver="3"
+#urlbase="http://thredds.silam.fmi.fi/thredds/ncss/grid/silam_europe_pollen_v5_8/runs/$runpref"; ncver="3"
+#urlbase="https://silam.fmi.fi/thredds/ncss/silam_europe_pollen_v5_8_1/runs/$runpref"; ncver=""
 #urlbase="https://silam.fmi.fi/thredds/ncss/silam_europe_pollen_v5_8/runs/$runpref"; ncver=""
 
 pollens="POLLEN_ALDER_m22 POLLEN_BIRCH_m22 POLLEN_GRASS_m32 POLLEN_MUGWORT_m18 POLLEN_MUGW1_m18 POLLEN_MUGW2_m18 POLLEN_MUGW3_m18 POLLEN_MUGW4_m18 POLLEN_MUGW5_m18 POLLEN_OLIVE_m28 POLLEN_RAGWEED_m18"
