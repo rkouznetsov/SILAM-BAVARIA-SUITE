@@ -49,16 +49,16 @@ program ICON2hybrid
     call codes_get(igrib, "nlev", jTmp)
     if (jTmp == 66 .and. 11 == iTmp) then
       call  ICON66(pv, nv) !!Icon d2
-    elseif (jTmp == 75 .and. 2 /= iTmp) then
+    elseif (jTmp == 75 .and. 2 == iTmp) then
       call  ICON75(pv, nv) !!Icon EU 2022
-    elseif (jTmp == 61 .and. 2 /= iTmp) then
+    elseif (jTmp == 61 .and. 2 == iTmp) then
       call  ICON61(pv, nv) !!Icon EU before 2022
     else
         write (*,*) "Failed to process message ", grib_count
         write (*,*) "generatingProcessIdentifier = '", iTmp, "' nlev = ", jTmp
-        write (*,*) "modelName=icreu_0.625l60 and nlev=66"
+        write (*,*) "modelName=icreu_0.625 and nlev=66"
         write (*,*) "or"
-        write (*,*) "modelName=icreu_0.625l60 and nlev=75"
+        write (*,*) "modelName=icreu_0.625l60 and nlev=61"
         write (*,*) "or"
         write (*,*) "modelName=icreu_0.625l60 and nlev=75"
         write (*,*) "expected"
