@@ -21,7 +21,7 @@ if [ -n "${ECF_NAME}" ]; then
   echo "Running form ecflow"
   export progresscmd="ecflow_client --meter=progress"
   #export MAILTO="rostislav.kouznetsov@fmi.fi,mikhail.sofiev@fmi.fi"
-  export MAILTO="rostislav.kouznetsov@fmi.fi"
+  export MAILTO="rostislav.kouznetsov@fmi.fi,Evgeny.Kadantsev@fmi.fi"
 
 else
   echo "Running standalone: no mail!"
