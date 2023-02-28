@@ -33,10 +33,10 @@ END_LIST = GENERAL_PARAMETERS
 #   static_meteo_file = NETCDF:MEPS_RLL2018  /lustre/apps/silam/input/physiography/MEPS_vegfr_mbr2_v3_rllext.nc ##Fraction of vegetation
 #/lustre/apps/silam/input/physiography/MEPS_vegfr_mbr2_v3_rll.nc  
    
-   static_meteo_file  = GRIB COSMO-meteo/%ay4%am2%ad2%ah2/cosmo-d2_germany_rotated-lat-lon_time-invariant_%ay4%am2%ad2%ah2.grib2
+   static_meteo_file  = GRIB ICON-d2-meteo/%ay4%am2%ad2%ah2/icon-d2_germany_regular-lat-lon_time-invariant_%ay4%am2%ad2%ah2.grib2
 
-   dynamic_meteo_file = GRIB COSMO-meteo/%ay4%am2%ad2%ah2/cosmo-d2_germany_rotated-lat-lon_single-level_%ay4%am2%ad2%ah2+%f3.grib2
-   dynamic_meteo_file = GRIB COSMO-meteo/%ay4%am2%ad2%ah2/cosmo-d2_germany_rotated-lat-lon_hybrid-level_%ay4%am2%ad2%ah2+%f3.grib2
+   dynamic_meteo_file = GRIB ICON-d2-meteo/%ay4%am2%ad2%ah2/icon-d2_germany_regular-lat-lon_single-level_%ay4%am2%ad2%ah2+%f3.grib2
+   dynamic_meteo_file = GRIB ICON-d2-meteo/%ay4%am2%ad2%ah2/icon-d2_germany_regular-lat-lon_hybrid-level_%ay4%am2%ad2%ah2+%f3.grib2
 
 #   static_meteo_file = GRADS /lustre/apps/silam/input/emis/v5/salinity_map_global_1deg.fld_water_salinity.grads.super_ctl
    meteo_time_step = 1 hr 
@@ -124,7 +124,7 @@ LIST = emission_parameters
 #Ini from boundaries : bootstrap
 #  initialization_file = NETCDF   SILAM-bnd/%ay4%am2%ad2%ah2/SILAM4DE%ay4-%am2-%ad2T%ah2:00:00Z_%y4%m2%d2%h2.nc 
 
-   boundary_type = ZERO        ! ZERO / DIRICHLET   
+   boundary_type =  DIRICHLET        ! ZERO / DIRICHLET   
    if_lateral_boundary = YES         ! YES/NO 
    if_top_boundary =  YES             ! YES/NO 
    if_bottom_boundary =  NO          ! YES/NO 
@@ -165,10 +165,10 @@ LIST = emission_parameters
   # COSMO domain with some cut out
   lat_start = -4 
    lon_start = -4
-   dx = 0.02
-   dy = 0.02
-   nx = 401   # 
-   ny = 501 
+   dx = 0.2
+   dy = 0.2
+   nx = 41   # 
+   ny = 51 
 
    lat_s_pole = -40
    lon_s_pole = 10.
