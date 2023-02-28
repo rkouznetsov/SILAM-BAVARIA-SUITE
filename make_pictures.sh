@@ -103,7 +103,7 @@ if $publish; then
     fi
 
     popd
-    fmi_data_path=eslogin:/fmi/data/silam.fmi.fi/partners/Bavaria
+    fmi_data_path=/var/www/html/Bavaria
     echo Syncing $outputdir/webloads to $fmi_data_path
 #    mkdir -p $fmi_data_path
     $rsync -a --delete  $outputdir/webloads/$fctype/* $fmi_data_path/

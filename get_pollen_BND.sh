@@ -6,7 +6,7 @@
 
 # Enjoy!
 
-email="test-download-bavaria"
+email="ROBERT.GEBAUER@gmx.net"
 #email=test
 
 set -e
@@ -85,6 +85,9 @@ maxjobs=16
 #  4           0   1:01
 #  8           0  0:39
 # 16           0  0:34
+
+ncks --version
+ncatted --version
 
 
 # make dates

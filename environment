@@ -7,7 +7,6 @@ export scriptdir
 
 export fctype=pollen
 
-export COSMO_PATH=${scriptdir}/COSMO-meteo
 export ICON_PATH=${scriptdir}/ICON-d2-meteo
 export METEO_DIR=${ICON_PATH}
 #export silam_binary=${scriptdir}/silam-model/bin/silam_v5_6.gnumpi # MPI run
@@ -21,7 +20,7 @@ if [ -n "${ECF_NAME}" ]; then
   echo "Running form ecflow"
   export progresscmd="ecflow_client --meter=progress"
   #export MAILTO="rostislav.kouznetsov@fmi.fi,mikhail.sofiev@fmi.fi"
-  export MAILTO="rostislav.kouznetsov@fmi.fi,Evgeny.Kadantsev@fmi.fi"
+  export MAILTO="ROBERT.GEBAUER@gmx.net"
 
 else
   echo "Running standalone: no mail!"
@@ -39,6 +38,8 @@ export fcdate=`date -u -d "3 hours" +%Y%m%d`
 export fchour=00
 export maxhours=48
 #export fcdate=`date -u -d "-2 days" +%Y%m%d`
+
+export publish=true
 
 
 export PUTLOGOCMDPOLLEN="composite  -geometry  +70+515  $scriptdir/grads/fmi-logo-60x30a.png"
